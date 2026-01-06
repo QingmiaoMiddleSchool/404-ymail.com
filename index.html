@@ -1,0 +1,5379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404的邮箱 - 林昭的紧急来信</title>
+		<link rel="icon" href="https://i.imgs.ovh/2026/01/02/Cintz9.th.png " type="image/png">
+    <style>
+        /* ==================== 恐怖GIF页面样式 ==================== */
+        .terror-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            cursor: none;
+        }
+        
+        .terror-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(20, 0, 0, 0.95);
+            border: 3px solid #8b0000;
+            border-radius: 10px;
+            padding: 30px;
+            width: 80%;
+            max-width: 600px;
+            z-index: 20;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.7);
+            animation: popupAppear 1.5s ease-out, glow 3s infinite alternate;
+            text-align: center;
+        }
+        
+        .popup-title {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: #ff0000;
+            text-shadow: 0 0 15px #ff0000;
+            letter-spacing: 4px;
+        }
+        
+        .popup-message {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #ff6666;
+        }
+        
+        .popup-note {
+            font-size: 1rem;
+            color: #cc3333;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .close-popup {
+            background-color: #400000;
+            color: #ff6666;
+            border: 2px solid #8b0000;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        .close-popup:hover {
+            background-color: #8b0000;
+            color: #fff;
+            box-shadow: 0 0 20px #ff0000;
+        }
+        
+        /* 全屏GIF容器 */
+        .gif-fullscreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            background: #000;
+        }
+        
+        .terror-gif {
+            width: 95%;
+            height: 95%;
+            object-fit: contain;
+            /* 红色泛光边框 */
+            border: 3px solid transparent;
+            border-radius: 10px;
+            box-shadow: 
+                0 0 20px #ff0000,
+                0 0 40px #ff0000,
+                0 0 60px #ff0000,
+                0 0 80px #ff0000,
+                inset 0 0 20px rgba(255, 0, 0, 0.3),
+                inset 0 0 40px rgba(255, 0, 0, 0.2);
+            animation: glow-pulse 3s infinite alternate;
+            display: none;
+        }
+        
+        /* 恐怖特效元素 */
+        .blood-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.15;
+            z-index: 2;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 0, 0, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 0, 0, 0.2) 0%, transparent 50%);
+            mix-blend-mode: multiply;
+            display: none;
+        }
+        
+        /* 随机血滴 */
+        .blood-drip {
+            position: fixed;
+            top: -100px;
+            width: 3px;
+            height: 150px;
+            background: linear-gradient(to bottom, transparent, #ff0000, #8b0000);
+            border-radius: 0 0 3px 3px;
+            z-index: 3;
+            pointer-events: none;
+            animation: drip 8s infinite linear;
+            filter: blur(0.5px);
+            display: none;
+        }
+        
+        /* 闪烁边框 */
+        .border-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 4;
+            box-shadow: inset 0 0 100px rgba(255, 0, 0, 0);
+            animation: borderFlash 12s infinite;
+            display: none;
+        }
+        
+        /* ==================== 警情通报页面样式 ==================== */
+        .police-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a2463;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-y: auto;
+            display: none;
+            z-index: 9998;
+            font-family: "SimSun", "宋体", "NSimSun", serif;
+            animation: fadeIn 1s ease;
+        }
+        
+        .police-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: rgba(10, 36, 99, 0.9);
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .header-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: #8b0000;
+        }
+        
+        .emblem {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .emblem i {
+            font-size: 3.5rem;
+            color: #ffde59;
+        }
+        
+        .police-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .police-department {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 8px;
+        }
+        
+        .notification-title {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #ffffff;
+        }
+        
+        .notification-number {
+            font-size: 1.2rem;
+            color: #e0e0ff;
+            margin-bottom: 5px;
+        }
+        
+        .police-content {
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        .police-content p {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .emphasis {
+            font-weight: bold;
+            color: #ffde59;
+        }
+        
+        .conclusion {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 5px;
+            margin: 40px 0;
+            border-left: 5px solid #8b0000;
+            text-align: center;
+        }
+        
+        .crime-list, .progress-list {
+            margin: 0 auto 30px auto;
+            text-align: left;
+            display: inline-block;
+            max-width: 900px;
+        }
+        
+        .crime-list li, .progress-list li {
+            margin-bottom: 25px;
+            text-align: left;
+            line-height: 1.8;
+        }
+        
+        .crime-list li strong, .progress-list li strong {
+            color: #ffde59;
+        }
+        
+        .contact-info {
+            text-align: center;
+            margin: 40px 0;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+        
+        .contact-info .phone {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffde59;
+            margin-top: 10px;
+        }
+        
+        .police-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .date {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .stamp {
+            display: inline-block;
+            margin-top: 20px;
+        }
+        
+        .stamp-content {
+            border: 3px solid #8b0000;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 5px;
+            background-color: rgba(10, 36, 99, 0.9);
+        }
+        
+        .back-to-chat-btn {
+            background-color: #400000;
+            color: #ff6666;
+            border: 2px solid #8b0000;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            font-weight: bold;
+            letter-spacing: 2px;
+            display: inline-block;
+        }
+        
+        .back-to-chat-btn:hover {
+            background-color: #8b0000;
+            color: #fff;
+            box-shadow: 0 0 20px #ff0000;
+        }
+        
+        /* ==================== 原有CSS样式 ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f0f0f0"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23e0e0e0" stroke-width="0.5"/></svg>');
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 邮件弹窗样式 */
+        .email-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .email-modal-content {
+            width: 90%;
+            max-width: 900px;
+            height: 90vh;
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .email-modal-header {
+            background: linear-gradient(to bottom, #4a6fa5, #3a5a8a);
+            color: white;
+            padding: 20px;
+            border-bottom: 1px solid #2a4a7a;
+        }
+        
+        .email-modal-header h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .email-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            font-size: 16px;
+            line-height: 1.8;
+            background-color: #fff;
+        }
+        
+        .email-modal-body strong {
+            color: #c0392b;
+            font-weight: bold;
+        }
+        
+        .email-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #e74c3c;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .email-modal-close:hover {
+            background-color: #c0392b;
+        }
+        
+        /* 举报信弹窗样式 */
+        .report-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1001;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .report-modal-content {
+            width: 90%;
+            max-width: 900px;
+            height: 90vh;
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .report-modal-header {
+            background: linear-gradient(to bottom, #8b0000, #660000);
+            color: white;
+            padding: 20px;
+            border-bottom: 1px solid #500000;
+        }
+        
+        .report-modal-header h2 {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        
+        .report-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        
+        .report-input {
+            background-color: #fff8f8;
+            border: 1px dashed #cc0000;
+            padding: 8px 12px;
+            margin: 0 5px;
+            min-width: 150px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #8b0000;
+            font-weight: bold;
+        }
+        
+        .report-submit {
+            background-color: #8b0000;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+        }
+        
+        .report-submit:hover {
+            background-color: #660000;
+        }
+        
+        /* 录音播放弹窗样式 */
+        .recording-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0f0a;
+            color: #ff0000;
+            z-index: 1002;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', '等宽', monospace;
+            padding: 40px;
+            overflow: hidden;
+        }
+
+        .recording-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(10, 255, 10, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10, 255, 10, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        .recording-content-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .recording-header {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 10, 10, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .recording-title {
+            color: #ff2a2a;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .recording-subtitle {
+            color: #ff8080;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .recording-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(5, 15, 5, 0.85);
+            border: 1px solid rgba(255, 10, 10, 0.3);
+            box-shadow: 
+                0 0 30px rgba(255, 10, 10, 0.1),
+                inset 0 0 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .recording-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 95%,
+                rgba(10, 255, 10, 0.05) 100%
+            );
+            pointer-events: none;
+        }
+
+        .recording-transcript {
+            font-size: 18px;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .recording-line {
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: typeLine 0.5s ease forwards;
+        }
+
+        .recording-character {
+            opacity: 0;
+            animation: typeChar 0.05s ease forwards;
+        }
+
+        .speaker {
+            display: block;
+            margin-top: 25px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .speaker::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #ff2a2a;
+            font-size: 14px;
+        }
+
+        .speaker-linzhao {
+            color: #ff2a2a;
+            font-weight: bold;
+        }
+
+        .speaker-linzhao::before {
+            content: '●';
+            color: #ff2a2a;
+            animation: pulse 2s infinite;
+        }
+
+        .speaker-male-clear {
+            color: #ffa0a0;
+        }
+
+        .speaker-male-serious {
+            color: #ff8080;
+        }
+
+        .speaker-female-doubt {
+            color: #ff8080;
+        }
+
+        .sound-effect {
+            color: #ff4040;
+            font-style: italic;
+            font-size: 16px;
+            opacity: 0.8;
+            display: inline-block;
+            margin: 0 3px;
+        }
+
+        .highlight {
+            color: #ff0000;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+            position: relative;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -2px;
+            height: 1px;
+            background: #ff0000;
+            box-shadow: 0 0 5px #ff0000;
+        }
+
+        .narration {
+            color: #ff8080;
+            font-style: italic;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed rgba(255, 10, 10, 0.3);
+            position: relative;
+        }
+
+        .narration::before {
+            content: '📼';
+            position: absolute;
+            left: -30px;
+            opacity: 0.5;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background: #ff2a2a;
+            margin-left: 2px;
+            animation: cursorBlink 1s infinite;
+            vertical-align: baseline;
+            height: 1.2em;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .recording-footer {
+            text-align: center;
+            padding: 20px;
+            color: #ff8080;
+            font-size: 14px;
+        }
+
+        .warning-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.05);
+            pointer-events: none;
+            z-index: 1003;
+            animation: warningFlash 10s infinite;
+            display: none;
+        }
+
+        @keyframes warningFlash {
+            0%, 90% { opacity: 0; }
+            95% { opacity: 0.1; }
+            100% { opacity: 0; }
+        }
+
+        .sound-indicator {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1004;
+        }
+
+        .sound-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff2a2a;
+            border-radius: 50%;
+            opacity: 0;
+            animation: soundPulse 0.5s ease-out;
+        }
+
+        @keyframes soundPulse {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .scroll-line {
+            position: absolute;
+            right: -20px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                #ff2a2a,
+                transparent
+            );
+            opacity: 0.5;
+        }
+
+        .typehead {
+            position: absolute;
+            right: -40px;
+            top: 50px;
+            width: 30px;
+            height: 40px;
+            background: rgba(255, 42, 42, 0.1);
+            border: 1px solid rgba(255, 42, 42, 0.3);
+            animation: typeheadMove 20s linear infinite;
+        }
+
+        @keyframes typeheadMove {
+            0% { top: 50px; }
+            50% { top: 80%; }
+            100% { top: 50px; }
+        }
+
+        .crt-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(255, 0, 0, 0.15) 0px,
+                    rgba(255, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            pointer-events: none;
+            z-index: 1005;
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.97; }
+            50% { opacity: 0.99; }
+            100% { opacity: 0.97; }
+        }
+        
+        /* 主容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        /* 头部样式 */
+        .header {
+            background: linear-gradient(to bottom, #4a6fa5, #3a5a8a);
+            color: white;
+            padding: 20px;
+            border-bottom: 1px solid #2a4a7a;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .urgent-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #e74c3c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 14px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            display: flex;
+            min-height: 700px;
+        }
+        
+        /* 侧边栏 - 邮件列表 */
+        .sidebar {
+            width: 300px;
+            border-right: 1px solid #ddd;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+        }
+        
+        .mail-list {
+            list-style: none;
+        }
+        
+        .mail-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .mail-item:hover {
+            background-color: #eef5ff;
+        }
+        
+        .mail-item.active {
+            background-color: #e0ebff;
+            border-left: 4px solid #4a6fa5;
+        }
+        
+        .mail-item.unread .sender {
+            font-weight: bold;
+        }
+        
+        .mail-item .sender {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #2a4a7a;
+        }
+        
+        .mail-item .subject {
+            font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .mail-item .time {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        /* 邮件内容区 */
+        .mail-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .mail-header {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .mail-header h2 {
+            font-size: 22px;
+            color: #2a4a7a;
+            margin-bottom: 10px;
+        }
+        
+        .mail-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .mail-body {
+            height: 250px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 3px;
+            line-height: 1.7;
+            white-space: pre-line;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .mail-body strong {
+            color: #c0392b;
+        }
+        
+        /* 聊天区域 */
+        .chat-section {
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 400px;
+        }
+        
+        .chat-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2a4a7a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chat-date {
+            font-size: 12px;
+            color: #777;
+            font-weight: normal;
+        }
+        
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .chat-window {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message {
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            max-width: 85%;
+            animation: fadeIn 0.3s;
+        }
+        
+        .message.sent {
+            background-color: #e0ebff;
+            margin-left: auto;
+            border: 1px solid #3a5a8a;
+        }
+        
+        .message.received {
+            background-color: #f0f0f0;
+            margin-right: auto;
+            border: 1px solid #ddd;
+        }
+        
+        .message.system {
+            background-color: #ffffff;
+            margin: 0 auto;
+            border: 1px solid #000000;
+            max-width: 95%;
+            text-align: center;
+            font-size: 13px;
+            color: #010101;
+        }
+        
+        .message-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .message-time {
+            font-weight: normal;
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .message-content {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .message-content a {
+            color: #2a4a7a;
+            text-decoration: underline;
+            word-break: break-all;
+        }
+        
+        .message-content img {
+            max-width: 200px;
+            max-height: 150px;
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            display: block;
+            cursor: pointer;
+        }
+        
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: #4a6fa5;
+        }
+        
+        .send-button {
+            padding: 10px 20px;
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        .send-button:hover {
+            background-color: #3a5a8a;
+        }
+        
+        .send-button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        
+        /* 打字指示器样式 */
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            margin-bottom: 10px;
+            margin-right: auto;
+            background-color: #f0f0f0;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            max-width: 150px;
+            width: auto;
+        }
+        
+        .typing-text {
+            font-size: 13px;
+            color: #666;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+        
+        .typing-dots {
+            display: flex;
+        }
+        
+        .typing-dots span {
+            height: 8px;
+            width: 8px;
+            background-color: #777;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        
+        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* 日期分隔线 */
+        .date-divider {
+            text-align: center;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .date-divider span {
+            background-color: #f9f9f9;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #777;
+            border: 1px solid #ddd;
+        }
+        
+        .date-divider:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #ddd;
+            z-index: -1;
+        }
+        
+        /* 历史消息提示 */
+        .history-note {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #888;
+            font-style: italic;
+        }
+        
+        /* 底部免责声明 */
+        .footer {
+            background-color: #f0f0f0;
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+        
+        .footer p {
+            margin: 0;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+                max-height: 300px;
+            }
+            
+            .mail-body {
+                height: 200px;
+            }
+            
+            .email-modal-body {
+                padding: 20px;
+                font-size: 14px;
+            }
+            
+            .terror-popup {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .popup-title {
+                font-size: 2rem;
+            }
+            
+            .popup-message {
+                font-size: 1.1rem;
+            }
+            
+            .police-container {
+                padding: 20px 15px;
+            }
+            
+            .police-department {
+                font-size: 1.8rem;
+                letter-spacing: 5px;
+            }
+            
+            .notification-title {
+                font-size: 2.2rem;
+            }
+            
+            .police-content {
+                font-size: 1rem;
+            }
+            
+            .crime-list, .progress-list {
+                padding-left: 15px;
+            }
+        }
+        
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* 图片放大功能样式 */
+        .image-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            cursor: zoom-out;
+        }
+
+        .zoomable-image {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            cursor: grab;
+        }
+
+        .zoomable-image:active {
+            cursor: grabbing;
+        }
+		
+        /* 红色泛光特效样式 */
+        .image-glow {
+            position: relative;
+            overflow: visible;
+        }
+
+        .image-glow::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            background: linear-gradient(45deg, #ff0000, #ff3333, #ff0000, #ff3333);
+            background-size: 400% 400%;
+            border-radius: 10px;
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            animation: glowPulse 3s ease-in-out infinite;
+            transform: scale(1.05);
+        }
+
+        .image-glow.active::before {
+            opacity: 0.8;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                background-position: 0% 50%;
+                transform: scale(1.05);
+                filter: blur(20px);
+            }
+            50% {
+                background-position: 100% 50%;
+                transform: scale(1.1);
+                filter: blur(25px);
+            }
+        }
+
+        /* 添加红色泛光边框效果 */
+        .glow-border {
+            box-shadow: 
+                0 0 20px rgba(255, 0, 0, 0.8),
+                0 0 40px rgba(255, 0, 0, 0.6),
+                0 0 60px rgba(255, 0, 0, 0.4),
+                0 0 80px rgba(255, 0, 0, 0.2),
+                inset 0 0 30px rgba(255, 0, 0, 0.3);
+            transition: box-shadow 0.5s ease;
+        }
+        
+        /* 新增的举报信样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SimSun', '宋体', serif;
+        }
+        
+        .blank-input {
+            display: inline-block;
+            min-width: 150px;
+            margin: 0 5px;
+            position: relative;
+        }
+        
+        .blank-input input {
+            width: 100%;
+            padding: 4px 8px;
+            border: 1px solid #b30000;
+            border-radius: 2px;
+            background-color: #fff9f9;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .blank-input input:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(179, 0, 0, 0.5);
+            background-color: #fff;
+        }
+        
+        .blank-input input::placeholder {
+            color: #999;
+            font-weight: normal;
+        }
+        
+        .blank-hint {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            background-color: #b30000;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .blank-input:hover .blank-hint {
+            opacity: 1;
+        }
+        
+        .blank-hint::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 10px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #b30000 transparent transparent transparent;
+        }
+        
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .submit-btn {
+            background-color: #b30000;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            font-size: 18px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            letter-spacing: 1px;
+        }
+        
+        .submit-btn:hover {
+            background-color: #8a0000;
+        }
+        
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .result-message {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 3px;
+            display: none;
+            font-weight: bold;
+        }
+        
+        .success {
+            background-color: #e6ffe6;
+            color: #006600;
+            border: 1px solid #99cc99;
+        }
+        
+        .error {
+            background-color: #ffe6e6;
+            color: #b30000;
+            border: 1px solid #ff9999;
+        }
+        
+        .letter-signature {
+            text-align: right;
+            margin-top: 30px;
+            font-style: italic;
+        }
+        
+        .instructions {
+            background-color: #fff9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #b30000;
+        }
+        
+        .instructions h3 {
+            color: #b30000;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        /* ==================== 恐怖GIF动画 ==================== */
+        @keyframes glow-pulse {
+            0% { 
+                box-shadow: 
+                    0 0 20px #ff0000,
+                    0 0 40px #ff0000,
+                    0 0 60px #ff0000,
+                    0 0 80px #ff0000,
+                    inset 0 0 20px rgba(255, 0, 0, 0.3),
+                    inset 0 0 40px rgba(255, 0, 0, 0.2);
+                border-color: rgba(255, 0, 0, 0.5);
+            }
+            100% { 
+                box-shadow: 
+                    0 0 30px #ff0000,
+                    0 0 60px #ff0000,
+                    0 0 90px #ff0000,
+                    0 0 120px #ff0000,
+                    inset 0 0 30px rgba(255, 0, 0, 0.4),
+                    inset 0 0 60px rgba(255, 0, 0, 0.3);
+                border-color: rgba(255, 0, 0, 0.8);
+            }
+        }
+        
+        @keyframes drip {
+            0% { top: -150px; opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { top: 100vh; opacity: 0; }
+        }
+        
+        @keyframes popupAppear {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            70% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 50px rgba(255, 0, 0, 0.7); }
+            50% { box-shadow: 0 0 80px rgba(255, 0, 0, 0.9), 0 0 120px rgba(139, 0, 0, 0.5); }
+        }
+        
+        @keyframes borderFlash {
+            0%, 70%, 100% { box-shadow: inset 0 0 100px rgba(255, 0, 0, 0); }
+            75% { box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.5); }
+            80% { box-shadow: inset 0 0 100px rgba(255, 0, 0, 0); }
+            85% { box-shadow: inset 0 0 100px rgba(139, 0, 0, 0.7); }
+            90% { box-shadow: inset 0 0 100px rgba(255, 0, 0, 0); }
+        }
+    </style>
+</head>
+
+<!-- 文字雨特效代码 - 带触发机制 -->
+<style>
+/* 文字雨容器 - 固定在页面顶部 */
+.text-rain-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+/* 文字粒子样式 - 黑色宋体无背景 */
+.text-particle {
+    position: absolute;
+    color: #000000;
+    font-weight: 600;
+    font-size: 22px;
+    font-family: 'SimSun', '宋体', serif;
+    user-select: none;
+    opacity: 0.9;
+    text-shadow: none;
+    filter: none;
+    z-index: 2;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* 红色拖尾线 */
+.tail-line {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1.5px;
+    background: linear-gradient(to bottom, transparent, #ff0000 10%, #ff0000);
+    transform: translateX(-50%);
+    z-index: 1;
+    opacity: 0.9;
+    transform-origin: center top;
+}
+</style>
+
+<div class="text-rain-container" id="textRain"></div>
+
+<script>
+// ====================== 文字雨特效 - 修复切换标签页卡顿问题 ======================
+// 树木主题汉字库
+const textPool = "林、森、树、板、桥、柱、柏、杉、棉、桶、楼、梯、桃、梨、枝、柳、桉、栎、檩、橡、槐、梓、杉、枸、柑、枯、柯、柘、栋、柩、栌、柬、查、相、枵、柚、枳、拐、栅、柙、柞、柃、柏、柝、栀、柢、栎、枸、栅、柳、柒、染、柠、柁、柱、柿、栏、树、柽、柔、枷、架、梆、桂、桔、栳、栲、栽、桠、郴、桓、栖、栗、桡、挝、桎、框、桄、档、柴、桌、桢、桐、桤、桃、栓、桧、株、梃、栝、桥、臬、桦、桕、桁、桀、格、桅、旬、条、桉、案、栾、桨、校、桩、核、样、桊、栩、桑、根、枨、弃、棒、棱、楮、棋、椰、叶、植、棼、焚、森、椟、栋、桠、椅、椅、椠、栈、棠、椒、棹、椤、棵、棍、枣、棘、棰、椎、集、棉、棚、椋、棕、棺、椁、榔、极、棣、椭、椐、楗、楔、椿、椹、楠、楂、楝、禁、楚、楷、业、榄、杨、楫、榀、楞、榆、楹、榘、楸、椴、槐、槌、枫、榉、楦、榇、榈、弃、槎、楼、概、楣、椽、橐、榛、构、榧、蕖、连、杠、杩、桦、模、榻、槛、桤、枪、榫、榭、槔、榴、榕、榨、槟、榜、槁、椁、榱、槊、荣、槠、榷、榍、".split("、");
+
+// 文字雨状态控制
+let isTextRainActive = false;
+let textRainParticles = [];
+let textRainAnimationId = null;
+let textRainLastTime = 0;
+const textRainElement = document.getElementById('textRain');
+
+// 文字雨配置参数
+const textRainConfig = {
+    speed: 2.5,              // 下落速度 (像素/帧)
+    density: 0.6,           // 生成密度 (0-1)
+    sizeMin: 20,            // 最小字体大小
+    sizeMax: 26,            // 最大字体大小
+    tailColor: "#ff0000",   // 拖尾线颜色
+    tailWidth: 1.5,         // 拖尾线宽度
+    tailOpacity: 0.9        // 拖尾线不透明度
+};
+
+// 页面可见性状态
+let isPageVisible = true;
+let visibilityPausedTime = 0;
+let visibilityResumeTime = 0;
+
+// 监听页面可见性变化
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        // 页面隐藏时暂停动画
+        isPageVisible = false;
+        if (textRainAnimationId) {
+            cancelAnimationFrame(textRainAnimationId);
+            textRainAnimationId = null;
+        }
+        visibilityPausedTime = Date.now();
+    } else {
+        // 页面重新可见时恢复动画
+        isPageVisible = true;
+        visibilityResumeTime = Date.now();
+        
+        // 计算页面隐藏的时间
+        const hiddenDuration = visibilityResumeTime - visibilityPausedTime;
+        
+        // 更新所有粒子位置（补偿隐藏期间应该下落的位置）
+        if (isTextRainActive && hiddenDuration > 0) {
+            textRainParticles.forEach(particle => {
+                // 根据隐藏时间计算应该下落的位置
+                const fallDistance = particle.speed * (hiddenDuration / 16);
+                particle.y += fallDistance;
+                
+                // 更新DOM元素位置
+                if (particle.textElement) {
+                    particle.textElement.style.top = `${particle.y}px`;
+                }
+                
+                // 更新拖尾线
+                if (particle.tailElement) {
+                    const tailLength = particle.y - particle.startY;
+                    particle.tailElement.style.height = `${tailLength}px`;
+                }
+            });
+            
+            // 移除已经超出屏幕的粒子
+            for (let i = textRainParticles.length - 1; i >= 0; i--) {
+                const particle = textRainParticles[i];
+                if (particle.y > window.innerHeight + 50) {
+                    removeTextRainParticle(particle);
+                    textRainParticles.splice(i, 1);
+                }
+            }
+        }
+        
+        // 重新开始动画循环
+        if (isTextRainActive) {
+            animateTextRain();
+        }
+    }
+});
+
+// 创建文字粒子
+function createTextRainParticle() {
+    if (!isTextRainActive) return;
+    
+    // 随机选择文字
+    const text = textPool[Math.floor(Math.random() * textPool.length)];
+    
+    // 创建文字元素
+    const textElement = document.createElement('div');
+    textElement.className = 'text-particle';
+    textElement.textContent = text;
+    textElement.title = text;
+    
+    // 设置初始位置和样式
+    const startX = Math.random() * (window.innerWidth - 60);
+    const startY = -30;
+    
+    textElement.style.left = `${startX}px`;
+    textElement.style.top = `${startY}px`;
+    
+    // 随机字体大小
+    const fontSize = textRainConfig.sizeMin + Math.random() * (textRainConfig.sizeMax - textRainConfig.sizeMin);
+    textElement.style.fontSize = `${fontSize}px`;
+    
+    // 创建拖尾线元素
+    const tailElement = document.createElement('div');
+    tailElement.className = 'tail-line';
+    tailElement.style.left = `${startX + fontSize/2}px`;
+    tailElement.style.top = `${startY}px`;
+    tailElement.style.height = '0px';
+    tailElement.style.width = `${textRainConfig.tailWidth}px`;
+    tailElement.style.opacity = textRainConfig.tailOpacity;
+    tailElement.style.background = `linear-gradient(to bottom, transparent, ${textRainConfig.tailColor} 10%, ${textRainConfig.tailColor})`;
+    
+    // 添加到容器
+    textRainElement.appendChild(tailElement);
+    textRainElement.appendChild(textElement);
+    
+    // 创建粒子对象
+    const particle = {
+        textElement,
+        tailElement,
+        x: startX,
+        y: startY,
+        startX: startX,
+        startY: startY,
+        fontSize: fontSize,
+        speed: 0.8 + Math.random() * textRainConfig.speed,
+        isActive: true
+    };
+    
+    textRainParticles.push(particle);
+    
+    // 限制粒子数量，保持性能
+    if (textRainParticles.length > 150) {
+        const oldParticle = textRainParticles.shift();
+        removeTextRainParticle(oldParticle);
+    }
+}
+
+// 移除粒子
+function removeTextRainParticle(particle) {
+    if (particle.textElement && particle.textElement.parentNode) {
+        particle.textElement.parentNode.removeChild(particle.textElement);
+    }
+    if (particle.tailElement && particle.tailElement.parentNode) {
+        particle.tailElement.parentNode.removeChild(particle.tailElement);
+    }
+    particle.isActive = false;
+}
+
+// 更新粒子位置
+function updateTextRainParticles(timestamp) {
+    // 计算时间增量，确保动画平滑
+    const deltaTime = textRainLastTime ? timestamp - textRainLastTime : 16;
+    textRainLastTime = timestamp;
+    
+    // 更新所有粒子
+    for (let i = textRainParticles.length - 1; i >= 0; i--) {
+        const particle = textRainParticles[i];
+        
+        if (!particle.isActive) {
+            textRainParticles.splice(i, 1);
+            continue;
+        }
+        
+        // 更新下落位置
+        particle.y += particle.speed * (deltaTime / 16);
+        
+        // 更新文字位置
+        if (particle.textElement) {
+            particle.textElement.style.top = `${particle.y}px`;
+        }
+        
+        // 更新拖尾线
+        if (particle.tailElement) {
+            // 计算拖尾线长度
+            const tailLength = particle.y - particle.startY;
+            particle.tailElement.style.height = `${tailLength}px`;
+            particle.tailElement.style.top = `${particle.startY}px`;
+            
+            // 更新拖尾线颜色渐变
+            const gradientEnd = Math.min(100, tailLength * 0.3);
+            if (tailLength > 0) {
+                const gradientPercent = Math.min(30, (gradientEnd / tailLength) * 100);
+                particle.tailElement.style.background = 
+                    `linear-gradient(to bottom, transparent, ${textRainConfig.tailColor} ${gradientPercent}%, ${textRainConfig.tailColor})`;
+            }
+        }
+        
+        // 粒子超出屏幕时移除
+        if (particle.y > window.innerHeight + 50) {
+            removeTextRainParticle(particle);
+            textRainParticles.splice(i, 1);
+        }
+    }
+}
+
+// 文字雨动画循环
+function animateTextRain(timestamp) {
+    if (!isTextRainActive || !isPageVisible) return;
+    
+    updateTextRainParticles(timestamp);
+    textRainAnimationId = requestAnimationFrame(animateTextRain);
+}
+
+// 初始化文字雨
+function initTextRain() {
+    // 创建初始粒子
+    for (let i = 0; i < 25; i++) {
+        setTimeout(() => createTextRainParticle(), i * 200);
+    }
+    
+    // 定时生成新粒子
+    const particleInterval = setInterval(() => {
+        if (isTextRainActive && Math.random() < textRainConfig.density) {
+            createTextRainParticle();
+        }
+    }, 250);
+    
+    // 开始动画
+    animateTextRain();
+    
+    // 保存定时器以便清理
+    window.textRainInterval = particleInterval;
+}
+
+// 启动文字雨特效
+function startTextRain() {
+    if (isTextRainActive) return;
+    
+    isTextRainActive = true;
+    isPageVisible = !document.hidden;
+    console.log("文字雨特效启动 - 当前提示词: 砧木");
+    initTextRain();
+}
+
+// 停止文字雨特效
+function stopTextRain() {
+    isTextRainActive = false;
+    
+    // 取消动画循环
+    if (textRainAnimationId) {
+        cancelAnimationFrame(textRainAnimationId);
+        textRainAnimationId = null;
+    }
+    
+    // 清除所有粒子
+    textRainParticles.forEach(removeTextRainParticle);
+    textRainParticles = [];
+    
+    // 清除生成定时器
+    if (window.textRainInterval) {
+        clearInterval(window.textRainInterval);
+        delete window.textRainInterval;
+    }
+    
+    console.log("文字雨特效停止 - 举报信填写完成");
+}
+
+// 窗口大小变化时调整文字位置
+window.addEventListener('resize', () => {
+    textRainParticles.forEach(particle => {
+        if (particle.tailElement) {
+            particle.tailElement.style.left = `${particle.startX + particle.fontSize/2}px`;
+        }
+    });
+});
+
+// ====================== 触发机制 ======================
+// 监听当前提示词变化
+let currentPrompt = "start";
+let isReportComplete = false;
+
+// 监听系统提示变化
+function checkPromptChange() {
+    // 检查当前提示词是否为"砧木"
+    if (currentPrompt === "砧木" && !isTextRainActive) {
+        startTextRain();
+    }
+    
+    // 检查举报信是否完成且关键词正确
+    if (isReportComplete && isTextRainActive) {
+        // 延迟1秒后停止文字雨
+        setTimeout(stopTextRain, 1000);
+    }
+}
+
+// 监听用户输入
+let originalSendUserMessage;
+if (typeof sendUserMessage === 'function') {
+    originalSendUserMessage = sendUserMessage;
+    
+    // 重写sendUserMessage函数以监听关键词
+    window.sendUserMessage = function() {
+        const rawInput = messageInput.value.trim();
+        if (!rawInput || isWaitingForResponse) return;
+        
+        // 验证用户输入
+        if (!validateUserInput(rawInput)) {
+            const errorMessage = {
+                sender: "系统提示",
+                content: `输入格式不正确！${systemPrompts[currentKeyword].prompt}`,
+                type: "system",
+                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+            renderMessage(errorMessage);
+            messageInput.value = '';
+            return;
+        }
+        
+        // 标准化用户输入
+        const message = normalizeUserInput(rawInput);
+        
+        // 更新当前提示词
+        const oldPrompt = currentPrompt;
+        currentPrompt = currentKeyword;
+        
+        // 检查是否需要启动文字雨
+        if (currentPrompt === "砧木" && !isTextRainActive) {
+            startTextRain();
+        }
+        
+        // 调用原始函数
+        originalSendUserMessage();
+        
+        // 检查是否需要停止文字雨（在举报信提交成功后）
+        if (currentKeyword === "录音文件" && isTextRainActive) {
+            // 假设举报信提交成功后会进入"录音文件"阶段
+            isReportComplete = true;
+            checkPromptChange();
+        }
+    };
+}
+
+// 监听举报信提交
+let originalSubmitReport;
+if (typeof submitReport === 'function') {
+    originalSubmitReport = submitReport;
+    
+    window.submitReport = function() {
+        // 调用原始函数
+        const result = originalSubmitReport();
+        
+        // 检查是否提交成功
+        const resultMessage = document.getElementById('resultMessage');
+        if (resultMessage && resultMessage.className.includes('success')) {
+            isReportComplete = true;
+            checkPromptChange();
+        }
+        
+        return result;
+    };
+}
+
+// 页面加载完成后初始化
+window.addEventListener('DOMContentLoaded', () => {
+    console.log("文字雨特效已加载，将在提示词为'砧木'时启动");
+    
+    // 初始化文字雨容器（隐藏状态）
+    textRainElement.style.display = 'none';
+    
+    // 监听系统提示变化
+    const originalShowSystemPrompt = showSystemPrompt;
+    if (typeof showSystemPrompt === 'function') {
+        window.showSystemPrompt = function() {
+            originalShowSystemPrompt();
+            
+            // 更新当前关键词
+            currentPrompt = currentKeyword;
+            checkPromptChange();
+            
+            // 控制文字雨容器的显示/隐藏
+            if (currentKeyword === "砧木" || 
+                currentKeyword === "接穗" || 
+                currentKeyword === "成材" || 
+                currentKeyword === "举报信") {
+                textRainElement.style.display = 'block';
+            } else {
+                textRainElement.style.display = 'none';
+            }
+        };
+    }
+    
+    // 监听举报信弹窗打开
+    const originalShowReportModal = showReportModal;
+    if (typeof showReportModal === 'function') {
+        window.showReportModal = function() {
+            originalShowReportModal();
+            // 确保文字雨在举报信阶段显示
+            textRainElement.style.display = 'none';
+        };
+    }
+    
+    // 监听录音弹窗关闭
+    const originalShowRecordingModal = showRecordingModal;
+    if (typeof showRecordingModal === 'function') {
+        window.showRecordingModal = function() {
+            originalShowRecordingModal();
+            // 录音播放时文字雨继续显示
+            textRainElement.style.display = 'none';
+        };
+    }
+});
+// ==================== 恐怖故障显示屏动画代码 ====================
+// 创建动画容器样式
+const animationStyles = `
+/* 恐怖故障显示屏动画样式 */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0a0a0a;
+    z-index: 99999;
+    display: none;
+    overflow: hidden;
+}
+
+/* 半透明背景图 */
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://i.ibb.co/fz5C48Gv/c9adc09ceb3f52a7f060715bee57930f.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+/* 文字容器 */
+.animation-text-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+    width: 90%;
+}
+
+/* 文字行样式 */
+.animation-text-line {
+    font-size: 2.8rem;
+    line-height: 1.6;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+    font-family: 'SimSun', '宋体', monospace;
+}
+
+/* 初始文字样式 - 打字机效果 */
+.animation-original-text {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+/* 打字机光标样式 */
+.animation-type-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 2.8rem;
+    background-color: #fff;
+    margin-left: 2px;
+    vertical-align: bottom;
+    opacity: 0;
+}
+
+.animation-type-cursor.active {
+    animation: animation-cursor-blink 0.8s infinite;
+}
+
+/* 变换后文字样式 */
+.animation-transformed-text {
+    color: #ff0000;
+    text-shadow: 0 0 12px rgba(255, 0, 0, 0.9);
+    display: none;
+}
+
+/* 最终文字样式 */
+.animation-final-text {
+    font-size: 2.2rem;
+    color: #ff0000;
+    text-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+    display: none;
+    font-weight: bold;
+}
+
+/* END文字样式 */
+.animation-end-text {
+    font-size: 3.5rem;
+    color: #ff0000;
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.9);
+    display: none;
+    font-weight: bold;
+    letter-spacing: 8px;
+}
+
+/* 定格END样式 */
+.animation-end-text.final-frame {
+    color: #ff0000;
+    text-shadow: 0 0 25px rgba(255, 0, 0, 0.95);
+    animation: none !important;
+}
+
+/* 文字字符样式 - 用于逐字动画 */
+.animation-char {
+    display: inline-block;
+    position: relative;
+}
+
+/* 故障闪烁效果 */
+.animation-char.glitching {
+    animation: animation-glitch-char 0.15s infinite;
+}
+
+@keyframes animation-glitch-char {
+    0% { transform: translate(0, 0); text-shadow: 0 0 5px currentColor; }
+    20% { transform: translate(-1px, 1px); text-shadow: 1px -1px 3px currentColor, 0 0 10px #fff; }
+    40% { transform: translate(1px, -1px); text-shadow: -1px 1px 3px currentColor, 0 0 10px #0ff; }
+    60% { transform: translate(-1px, -1px); text-shadow: 1px 1px 3px currentColor, 0 0 10px #f0f; }
+    80% { transform: translate(1px, 1px); text-shadow: -1px -1px 3px currentColor, 0 0 10px #ff0; }
+    100% { transform: translate(0, 0); text-shadow: 0 0 5px currentColor; }
+}
+
+/* 字符变换效果 */
+.animation-char.changing {
+    animation: animation-change-char 0.3s forwards;
+}
+
+@keyframes animation-change-char {
+    0% { opacity: 1; transform: scale(1); }
+    20% { opacity: 0.2; transform: scale(0.8); color: #f00; }
+    40% { opacity: 0.8; transform: scale(1.2); color: #0f0; }
+    60% { opacity: 0.3; transform: scale(0.9); color: #00f; }
+    80% { opacity: 0.9; transform: scale(1.1); color: #ff0; }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* 字符回退效果 */
+.animation-char.backspacing {
+    animation: animation-backspace-char 0.2s forwards;
+}
+
+@keyframes animation-backspace-char {
+    0% { opacity: 1; transform: scale(1); }
+    20% { opacity: 0.5; transform: scale(1.1); color: #ff0; }
+    40% { opacity: 0.8; transform: scale(0.9); color: #f00; }
+    60% { opacity: 0.3; transform: scale(1.05); color: #ff0; }
+    80% { opacity: 0.1; transform: scale(0.95); color: #f00; }
+    100% { opacity: 0; transform: scale(0); }
+}
+
+/* END字符打字机效果 */
+.animation-end-char {
+    display: inline-block;
+    opacity: 0;
+}
+
+.animation-end-char.typing {
+    animation: animation-type-end-char 0.5s forwards;
+}
+
+@keyframes animation-type-end-char {
+    0% { opacity: 0; transform: scale(0) translateY(20px); }
+    30% { opacity: 0.5; transform: scale(1.2) translateY(-5px); color: #ff0; }
+    60% { opacity: 0.8; transform: scale(0.9) translateY(2px); color: #f00; }
+    80% { opacity: 0.9; transform: scale(1.05) translateY(0); color: #ff0; }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* 定格END字符样式 */
+.animation-end-char.final-char {
+    animation: none !important;
+    opacity: 1;
+    color: #ff0000 !important;
+    transform: scale(1) translateY(0) !important;
+}
+
+/* 雪花闪烁效果 - 文字视觉故障 */
+.animation-snow-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 0, 0, 0.03) 1px, transparent 1px),
+        radial-gradient(circle at 30% 40%, rgba(255, 0, 0, 0.02) 1px, transparent 1px),
+        radial-gradient(circle at 50% 60%, rgba(255, 0, 0, 0.03) 1px, transparent 1px),
+        radial-gradient(circle at 70% 80%, rgba(200, 0, 0, 0.02) 1px, transparent 1px),
+        radial-gradient(circle at 90% 10%, rgba(255, 0, 0, 0.03) 1px, transparent 1px);
+    background-size: 200px 200px, 150px 150px, 180px 180px, 220px 220px, 170px 170px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 2s ease-out;
+}
+
+.animation-snow-effect.active {
+    animation: animation-snow-flicker 0.8s infinite alternate;
+}
+
+.animation-snow-effect.final-state {
+    animation: none;
+    opacity: 0.1;
+}
+
+@keyframes animation-snow-flicker {
+    0% { opacity: 0.05; }
+    20% { opacity: 0.1; }
+    40% { opacity: 0.03; }
+    60% { opacity: 0.08; }
+    80% { opacity: 0.02; }
+    100% { opacity: 0.07; }
+}
+
+/* 屏幕扫描线效果 */
+.animation-scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        transparent 50%,
+        rgba(0, 0, 0, 0.2) 50%
+    );
+    background-size: 100% 6px;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* 屏幕整体闪烁效果 */
+.animation-screen-flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 0, 0, 0.1);
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0;
+}
+
+/* 打字机光标 */
+.animation-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 2.8rem;
+    background-color: #ff0000;
+    margin-left: 5px;
+    vertical-align: bottom;
+    opacity: 0;
+}
+
+.animation-cursor.active {
+    animation: animation-cursor-blink 0.8s infinite;
+}
+
+@keyframes animation-cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* END文字光标 */
+.animation-end-cursor {
+    display: inline-block;
+    width: 4px;
+    height: 3.5rem;
+    background-color: #ff0000;
+    margin-left: 5px;
+    vertical-align: bottom;
+    opacity: 0;
+}
+
+.animation-end-cursor.active {
+    animation: animation-cursor-blink 0.8s infinite;
+}
+
+.animation-end-cursor.final-state {
+    animation: none;
+    opacity: 0;
+}
+`;
+
+// 创建动画容器HTML
+const animationHTML = `
+<div class="screen" id="terrorDisplayScreen">
+    <!-- 半透明背景图 -->
+    <div class="background-image"></div>
+    
+    <!-- 雪花闪烁效果 -->
+    <div class="animation-snow-effect" id="animationSnowEffect"></div>
+    
+    <!-- 屏幕扫描线 -->
+    <div class="animation-scanlines"></div>
+    
+    <!-- 文字容器 -->
+    <div class="animation-text-container">
+        <!-- 初始文字 - 打字机效果 -->
+        <div class="animation-original-text animation-text-line" id="animationOriginalText">
+            <span id="animationTypedOriginalText"></span><span class="animation-type-cursor" id="animationOriginalCursor"></span>
+        </div>
+        
+        <!-- 变换后文字 -->
+        <div class="animation-transformed-text animation-text-line" id="animationTransformedText">
+            <span class="animation-char">森</span>
+            <span class="animation-char">照</span>
+            <span class="animation-char">：</span>
+            <span class="animation-char">吃</span>
+            <span class="animation-char">人</span>
+        </div>
+        
+        <!-- 最终文字 -->
+        <div class="animation-final-text" id="animationFinalText">
+            <span id="animationTypedText"></span><span class="animation-cursor" id="animationCursor"></span>
+        </div>
+        
+        <!-- END文字 -->
+        <div class="animation-end-text" id="animationEndText">
+            <span id="animationEndTypedText"></span><span class="animation-end-cursor" id="animationEndCursor"></span>
+        </div>
+    </div>
+    
+    <!-- 屏幕闪烁层 -->
+    <div class="animation-screen-flash" id="animationScreenFlash"></div>
+</div>
+`;
+
+// 初始化动画系统
+function initTerrorDisplayAnimation() {
+    // 添加样式到页面
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = animationStyles;
+    document.head.appendChild(styleSheet);
+    
+    // 添加HTML容器到页面
+    document.body.insertAdjacentHTML('beforeend', animationHTML);
+    
+    console.log("恐怖故障显示屏动画系统已初始化");
+}
+
+// 启动恐怖动画
+function startTerrorDisplayAnimation() {
+    const screen = document.getElementById('terrorDisplayScreen');
+    const originalText = document.getElementById('animationOriginalText');
+    const typedOriginalText = document.getElementById('animationTypedOriginalText');
+    const originalCursor = document.getElementById('animationOriginalCursor');
+    const transformedText = document.getElementById('animationTransformedText');
+    const finalText = document.getElementById('animationFinalText');
+    const endText = document.getElementById('animationEndText');
+    const typedText = document.getElementById('animationTypedText');
+    const endTypedText = document.getElementById('animationEndTypedText');
+    const cursor = document.getElementById('animationCursor');
+    const endCursor = document.getElementById('animationEndCursor');
+    const snowEffect = document.getElementById('animationSnowEffect');
+    const screenFlash = document.getElementById('animationScreenFlash');
+    
+    const transformedChars = transformedText.querySelectorAll('.animation-char');
+    
+    // 文字内容
+    const originalMessage = "林昭：吃植物人。。";
+    const finalMessage = "每一株青苗，终将成材";
+    const endMessage = "END";
+    
+    // 显示屏幕
+    screen.style.display = 'block';
+    
+    // 启动雪花效果
+    snowEffect.classList.add('active');
+    
+    // 第一阶段：打字机效果显示初始文字
+    function startOriginalTypewriter() {
+        let index = 0;
+        const typingSpeed = 120;
+        
+        typedOriginalText.textContent = "";
+        originalCursor.style.opacity = 1;
+        originalCursor.classList.add('active');
+        
+        function typeOriginal() {
+            if (index < originalMessage.length) {
+                typedOriginalText.textContent += originalMessage.charAt(index);
+                index++;
+                
+                setTimeout(typeOriginal, typingSpeed);
+            } else {
+                // 打字完成后，显示3秒后开始逐字故障变换
+                setTimeout(() => {
+                    // 移除光标
+                    originalCursor.classList.remove('active');
+                    originalCursor.style.opacity = 0;
+                    
+                    // 开始逐字故障变换
+                    startCharacterGlitch();
+                }, 3000);
+            }
+        }
+        
+        // 开始打字
+        setTimeout(typeOriginal, 500);
+    }
+    
+    // 逐字故障变换函数
+    function startCharacterGlitch() {
+        // 随机屏幕闪烁
+        triggerFlash();
+        
+        // 首先让所有字符开始闪烁
+        const originalChars = typedOriginalText.textContent.split('').map((char, i) => {
+            const span = document.createElement('span');
+            span.textContent = char;
+            span.className = 'animation-char';
+            return span;
+        });
+        
+        // 清空并重新添加字符
+        typedOriginalText.textContent = '';
+        originalChars.forEach(char => {
+            typedOriginalText.appendChild(char);
+            char.classList.add('glitching');
+        });
+        
+        // 定义要改变的字符位置和对应新字符
+        const charChanges = [
+            { index: 0, newChar: '森', delay: 300 },
+            { index: 1, newChar: '照', delay: 600 },
+            { index: 3, newChar: '吃', delay: 900 },
+            { index: 4, newChar: '植', delay: 1200 },
+            { index: 5, newChar: '物', delay: 1500 },
+            { index: 6, newChar: '人', delay: 1800 },
+            { index: 7, newChar: '', delay: 2100 },
+            { index: 8, newChar: '', delay: 2400 }
+        ];
+        
+        // 执行逐字变换
+        charChanges.forEach(change => {
+            setTimeout(() => {
+                const char = originalChars[change.index];
+                
+                // 停止闪烁，开始变换动画
+                char.classList.remove('glitching');
+                char.classList.add('changing');
+                
+                // 变换完成后更新字符
+                setTimeout(() => {
+                    if (change.newChar === '') {
+                        // 字符消失
+                        char.style.opacity = '0';
+                        char.style.visibility = 'hidden';
+                    } else {
+                        // 更新字符
+                        char.textContent = change.newChar;
+                    }
+                    
+                    // 移除变换动画类
+                    char.classList.remove('changing');
+                    
+                    // 再次开始闪烁
+                    setTimeout(() => {
+                        char.classList.add('glitching');
+                    }, 100);
+                    
+                }, 300);
+                
+                // 随机触发屏幕闪烁
+                if (Math.random() > 0.5) {
+                    setTimeout(() => {
+                        triggerFlash(0.08 + Math.random() * 0.1);
+                    }, Math.random() * 200);
+                }
+                
+            }, change.delay);
+        });
+        
+        // 所有字符变换完成后
+        setTimeout(() => {
+            // 移除所有闪烁效果
+            originalChars.forEach(char => {
+                if (char.parentNode) {
+                    char.classList.remove('glitching');
+                }
+            });
+            
+            // 屏幕强烈闪烁
+            triggerFlash(0.3);
+            
+            // 隐藏原始文本，显示变换后的红色文本
+            setTimeout(() => {
+                originalText.style.display = 'none';
+                transformedText.style.display = 'block';
+                
+                // 让红色文本字符闪烁
+                transformedChars.forEach(char => {
+                    char.classList.add('glitching');
+                });
+                
+                // 3秒后进入下一阶段
+                setTimeout(() => {
+                    // 移除红色文本的闪烁
+                    transformedChars.forEach(char => {
+                        char.classList.remove('glitching');
+                    });
+                    
+                    // 屏幕强烈闪烁
+                    triggerFlash(0.4);
+                    
+                    // 隐藏红色文本
+                    setTimeout(() => {
+                        transformedText.style.display = 'none';
+                        
+                        // 显示最终文本并开始打字机效果
+                        finalText.style.display = 'block';
+                        startTypewriter();
+                    }, 500);
+                    
+                }, 3000);
+                
+            }, 2700);
+        }, 2700);
+    }
+    
+    // 打字机效果
+    function startTypewriter() {
+        let index = 0;
+        const typingSpeed = 120;
+        
+        typedText.textContent = "";
+        cursor.style.opacity = 1;
+        cursor.classList.add('active');
+        
+        function typeWriter() {
+            if (index < finalMessage.length) {
+                typedText.textContent += finalMessage.charAt(index);
+                index++;
+                
+                // 随机添加雪花效果增强
+                if (Math.random() > 0.7) {
+                    snowEffect.style.opacity = 0.15 + Math.random() * 0.1;
+                }
+                
+                // 随机屏幕闪烁
+                if (Math.random() > 0.8) {
+                    triggerFlash(0.05);
+                }
+                
+                setTimeout(typeWriter, typingSpeed);
+            } else {
+                // 打字完成后，显示3秒
+                setTimeout(() => {
+                    // 开始逐字回退
+                    startBackspaceEffect();
+                }, 3000);
+            }
+        }
+        
+        // 开始打字
+        setTimeout(typeWriter, 500);
+    }
+    
+    // 逐字回退效果
+    function startBackspaceEffect() {
+        const messageChars = typedText.textContent.split('');
+        let index = messageChars.length - 1;
+        const backspaceSpeed = 100;
+        
+        function backspace() {
+            if (index >= 0) {
+                // 添加回退动画
+                const tempSpan = document.createElement('span');
+                tempSpan.textContent = messageChars[index];
+                tempSpan.className = 'animation-char backspacing';
+                tempSpan.style.display = 'inline-block';
+                typedText.appendChild(tempSpan);
+                
+                // 移除原始字符
+                typedText.textContent = typedText.textContent.slice(0, -1);
+                
+                // 随机屏幕闪烁
+                if (Math.random() > 0.6) {
+                    triggerFlash(0.07 + Math.random() * 0.08);
+                }
+                
+                index--;
+                
+                // 移除动画元素
+                setTimeout(() => {
+                    if (tempSpan.parentNode) {
+                        tempSpan.parentNode.removeChild(tempSpan);
+                    }
+                }, 200);
+                
+                setTimeout(backspace, backspaceSpeed);
+            } else {
+                // 所有字符回退完成后
+                setTimeout(() => {
+                    // 屏幕强烈闪烁
+                    triggerFlash(0.4);
+                    
+                    // 隐藏最终文本
+                    setTimeout(() => {
+                        finalText.style.display = 'none';
+                        
+                        // 显示END文字容器
+                        endText.style.display = 'block';
+                        
+                        // 开始END打字机效果
+                        startEndTypewriter();
+                    }, 300);
+                }, 500);
+            }
+        }
+        
+        // 开始回退
+        backspace();
+    }
+    
+    // END打字机效果
+    function startEndTypewriter() {
+        let index = 0;
+        const typingSpeed = 400;
+        
+        endTypedText.textContent = "";
+        endCursor.style.opacity = 1;
+        endCursor.classList.add('active');
+        
+        function typeEnd() {
+            if (index < endMessage.length) {
+                // 创建字符元素并添加打字动画
+                const charSpan = document.createElement('span');
+                charSpan.textContent = endMessage.charAt(index);
+                charSpan.className = 'animation-end-char typing';
+                endTypedText.appendChild(charSpan);
+                
+                // 屏幕闪烁
+                triggerFlash(0.15 + Math.random() * 0.1);
+                
+                // 雪花效果增强
+                snowEffect.style.opacity = 0.2 + Math.random() * 0.1;
+                
+                index++;
+                
+                setTimeout(typeEnd, typingSpeed);
+            } else {
+                // END打字完成后，短暂停留然后定格
+                setTimeout(() => {
+                    // 移除所有动画，定格在END
+                    finalFreeze();
+                }, 1000);
+            }
+        }
+        
+        // 开始END打字
+        setTimeout(typeEnd, 300);
+    }
+    
+    // 最终定格函数
+    function finalFreeze() {
+        // 停止所有动画
+        const endChars = endTypedText.querySelectorAll('.animation-end-char');
+        endChars.forEach(char => {
+            char.classList.remove('typing');
+            char.classList.add('final-char');
+        });
+        
+        // 移除光标
+        endCursor.classList.remove('active');
+        endCursor.classList.add('final-state');
+        endCursor.style.opacity = 0;
+        
+        // 停止雪花闪烁动画，保持静态
+        snowEffect.classList.remove('active');
+        snowEffect.classList.add('final-state');
+        snowEffect.style.opacity = 0.08;
+        
+        // 添加最终定格样式
+        endText.classList.add('final-frame');
+        
+        // 最后屏幕轻微闪烁一次
+        setTimeout(() => {
+            triggerFlash(0.2);
+        }, 200);
+        
+        // 10秒后自动关闭动画屏幕
+        setTimeout(() => {
+            screen.style.display = 'none';
+        }, 10000);
+    }
+    
+    // 触发屏幕闪烁
+    function triggerFlash(intensity = 0.15) {
+        screenFlash.style.backgroundColor = `rgba(255, 0, 0, ${intensity})`;
+        screenFlash.style.opacity = 1;
+        
+        setTimeout(() => {
+            screenFlash.style.opacity = 0;
+        }, 80 + Math.random() * 100);
+    }
+    
+    // 开始动画
+    startOriginalTypewriter();
+}
+
+// 监听"食人族如何补充膳食纤维？"消息的触发
+function setupTerrorAnimationTrigger() {
+    // 监听用户发送消息
+    const originalSendUserMessage = window.sendUserMessage;
+    if (typeof originalSendUserMessage === 'function') {
+        window.sendUserMessage = function() {
+            const message = messageInput.value.trim();
+            
+            // 调用原始函数
+            originalSendUserMessage();
+            
+            // 检查是否发送了"食人族如何补充膳食纤维？"
+            if (message === "食人族如何补充膳食纤维？") {
+                // 延迟1秒后启动恐怖动画
+                setTimeout(() => {
+                    console.log("检测到'食人族如何补充膳食纤维？'消息，启动恐怖故障动画");
+                    startTerrorDisplayAnimation();
+                }, 1000);
+            }
+        };
+    }
+}
+
+// 页面加载完成后初始化
+window.addEventListener('DOMContentLoaded', function() {
+    // 初始化动画系统
+    initTerrorDisplayAnimation();
+    
+    // 设置触发监听
+    setupTerrorAnimationTrigger();
+    
+    console.log("恐怖故障动画系统已准备就绪");
+});
+// ==================== 打字机动画代码 ====================
+// 此代码应在现有代码末尾添加
+
+// 创建动画样式
+const typewriterStyles = `
+/* 打字机动画容器 */
+.typewriter-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    z-index: 99999;
+    display: none;
+    overflow: hidden;
+    font-family: 'SimSun', '宋体', serif;
+}
+
+/* 文字容器 */
+.typewriter-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+    width: 90%;
+}
+
+/* 文字样式 */
+.typewriter-text {
+    font-size: 2.8rem;
+    line-height: 1.6;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+    color: #000000;
+    font-weight: normal;
+}
+
+/* END文字样式 */
+.typewriter-end-text {
+    font-size: 3.5rem;
+    color: #000000;
+    font-weight: bold;
+    letter-spacing: 10px;
+    display: none;
+}
+
+/* 打字机光标 */
+.typewriter-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 2.8rem;
+    background-color: #000000;
+    margin-left: 5px;
+    vertical-align: bottom;
+    opacity: 0;
+}
+
+.typewriter-cursor.active {
+    animation: typewriter-cursor-blink 0.8s infinite;
+}
+
+@keyframes typewriter-cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* END文字光标 */
+.typewriter-end-cursor {
+    display: inline-block;
+    width: 4px;
+    height: 3.5rem;
+    background-color: #000000;
+    margin-left: 5px;
+    vertical-align: bottom;
+    opacity: 0;
+}
+
+.typewriter-end-cursor.active {
+    animation: typewriter-cursor-blink 0.8s infinite;
+}
+
+/* 字符回退效果 */
+.typewriter-char.backspacing {
+    animation: typewriter-backspace-char 0.15s forwards;
+}
+
+@keyframes typewriter-backspace-char {
+    0% { opacity: 1; transform: scale(1); }
+    20% { opacity: 0.5; transform: scale(0.95); }
+    40% { opacity: 0.8; transform: scale(0.9); }
+    60% { opacity: 0.3; transform: scale(0.85); }
+    80% { opacity: 0.1; transform: scale(0.8); }
+    100% { opacity: 0; transform: scale(0); }
+}
+`;
+
+// 创建动画容器HTML
+const typewriterHTML = `
+<div class="typewriter-screen" id="typewriterScreen">
+    <!-- 文字容器 -->
+    <div class="typewriter-container">
+        <!-- 初始文字 - 打字机效果 -->
+        <div class="typewriter-text" id="typewriterOriginalText">
+            <span id="typewriterTypedText"></span><span class="typewriter-cursor" id="typewriterCursor"></span>
+        </div>
+        
+        <!-- END文字 -->
+        <div class="typewriter-end-text" id="typewriterEndText">
+            <span id="typewriterEndTypedText"></span><span class="typewriter-end-cursor" id="typewriterEndCursor"></span>
+        </div>
+    </div>
+</div>
+`;
+
+// 初始化打字机动画系统
+function initTypewriterAnimation() {
+    // 添加样式到页面
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = typewriterStyles;
+    document.head.appendChild(styleSheet);
+    
+    // 添加HTML容器到页面
+    document.body.insertAdjacentHTML('beforeend', typewriterHTML);
+    
+    console.log("打字机动画系统已初始化");
+}
+
+// 启动打字机动画
+function startTypewriterAnimation() {
+    const screen = document.getElementById('typewriterScreen');
+    const originalText = document.getElementById('typewriterOriginalText');
+    const typedText = document.getElementById('typewriterTypedText');
+    const cursor = document.getElementById('typewriterCursor');
+    const endText = document.getElementById('typewriterEndText');
+    const endTypedText = document.getElementById('typewriterEndTypedText');
+    const endCursor = document.getElementById('typewriterEndCursor');
+    
+    // 文字内容
+    const message = "林昭：到时候你可要手下留情呀！";
+    const endMessage = "END";
+    
+    // 显示屏幕
+    screen.style.display = 'block';
+    
+    // 第一阶段：打字机效果显示文字
+    function startTypewriter() {
+        let index = 0;
+        const typingSpeed = 120;
+        
+        typedText.textContent = "";
+        cursor.style.opacity = 1;
+        cursor.classList.add('active');
+        
+        function typeWriter() {
+            if (index < message.length) {
+                typedText.textContent += message.charAt(index);
+                index++;
+                
+                setTimeout(typeWriter, typingSpeed);
+            } else {
+                // 打字完成后，显示3秒后开始逐字回退
+                setTimeout(() => {
+                    // 开始逐字回退
+                    startBackspaceEffect();
+                }, 3000);
+            }
+        }
+        
+        // 开始打字
+        setTimeout(typeWriter, 500);
+    }
+    
+    // 逐字回退效果
+    function startBackspaceEffect() {
+        const messageChars = typedText.textContent.split('');
+        let index = messageChars.length - 1;
+        const backspaceSpeed = 80;
+        
+        function backspace() {
+            if (index >= 0) {
+                // 添加回退动画
+                const tempSpan = document.createElement('span');
+                tempSpan.textContent = messageChars[index];
+                tempSpan.className = 'typewriter-char backspacing';
+                tempSpan.style.display = 'inline-block';
+                typedText.appendChild(tempSpan);
+                
+                // 移除原始字符
+                typedText.textContent = typedText.textContent.slice(0, -1);
+                
+                index--;
+                
+                // 移除动画元素
+                setTimeout(() => {
+                    if (tempSpan.parentNode) {
+                        tempSpan.parentNode.removeChild(tempSpan);
+                    }
+                }, 150);
+                
+                setTimeout(backspace, backspaceSpeed);
+            } else {
+                // 所有字符回退完成后
+                setTimeout(() => {
+                    // 隐藏原始文本
+                    originalText.style.display = 'none';
+                    
+                    // 显示END文字容器
+                    endText.style.display = 'block';
+                    
+                    // 开始END打字机效果
+                    startEndTypewriter();
+                }, 500);
+            }
+        }
+        
+        // 开始回退
+        backspace();
+    }
+    
+    // END打字机效果
+    function startEndTypewriter() {
+        let index = 0;
+        const typingSpeed = 300;
+        
+        endTypedText.textContent = "";
+        endCursor.style.opacity = 1;
+        endCursor.classList.add('active');
+        
+        function typeEnd() {
+            if (index < endMessage.length) {
+                endTypedText.textContent += endMessage.charAt(index);
+                index++;
+                
+                setTimeout(typeEnd, typingSpeed);
+            } else {
+                // END打字完成后，光标持续闪烁
+                setTimeout(() => {
+                    // 保持光标闪烁，动画结束
+                }, 1000);
+            }
+        }
+        
+        // 开始END打字
+        typeEnd();
+    }
+    
+    // 开始动画
+    startTypewriter();
+}
+
+// 设置动画触发机制
+function setupTypewriterAnimationTrigger() {
+    // 监听用户发送消息
+    const originalSendUserMessage = window.sendUserMessage;
+    if (typeof originalSendUserMessage === 'function') {
+        window.sendUserMessage = function() {
+            const message = messageInput.value.trim();
+            
+            // 调用原始函数
+            originalSendUserMessage();
+            
+            // 检查是否发送了"期待我们下次见面"
+            if (message === "期待我们下次见面") {
+                // 延迟1秒后启动打字机动画
+                setTimeout(() => {
+                    console.log("检测到'期待我们下次见面'消息，启动打字机动画");
+                    startTypewriterAnimation();
+                }, 1000);
+            }
+        };
+    }
+}
+
+// 页面加载完成后初始化
+window.addEventListener('DOMContentLoaded', function() {
+    // 初始化打字机动画系统
+    initTypewriterAnimation();
+    
+    // 设置触发监听
+    setupTypewriterAnimationTrigger();
+    
+    console.log("打字机动画系统已准备就绪，将在用户发送'期待我们下次见面'时触发");
+});
+</script>
+
+<body>
+    <!-- ==================== 恐怖GIF页面 ==================== -->
+    <div class="terror-page" id="terrorPage">
+        <!-- 恐怖弹窗 -->
+        <div class="terror-popup" id="terrorPopup">
+            <div class="popup-title">⚠️ 您好 ⚠️</div>
+            <div class="popup-message">
+                我是用户"林昭"电子手表人工智能。<br><br>
+                2025年9月16日18：30设备受到损坏<br><br>
+				以下是设备损坏前的自动录像。<br><br>
+                依照指令，现将自动录像发送给用户的紧急联系人。
+            </div>
+            <div class="popup-note">
+                点击"继续观看"即表示您已了解并接受可能的风险
+            </div>
+            <button class="close-popup" id="closeTerrorPopup">继续观看</button>
+        </div>
+        
+        <!-- 全屏GIF -->
+        <div class="gif-fullscreen" id="gifFullscreen">
+            <img src="" alt="恐怖GIF" class="terror-gif" id="terrorGif">
+        </div>
+        
+        <!-- 特效元素 -->
+        <div class="blood-overlay" id="bloodOverlay"></div>
+        <div class="border-flash" id="borderFlash"></div>
+    </div>
+    
+    <!-- ==================== 警情通报页面 ==================== -->
+    <div class="police-page" id="policePage">
+        <div class="police-container">
+            <div class="header-decoration"></div>
+            
+            <div class="emblem">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            
+            <div class="police-header">
+                <div class="police-department">武阳市公安局</div>
+                <div class="notification-title">警情通报</div>
+                <div class="notification-number">（通报编号：武公通〔2025〕第087号）</div>
+            </div>
+            
+            <div class="police-content">
+                <p>2025年9月，我局接获群众实名举报，反映我市青苗中学存在涉嫌违法犯罪行为。接报后，我局高度重视，立即联合市教育局、市卫生健康委、市市场监督管理局等部门成立"9·16"专案组，依法展开全面调查。</p>
+                
+                <p>经缜密侦查，现已查明：青苗中学自2020年起，以所谓"英材培育计划"为名，长期在校内组织实施非法基因采集、人体实验及食品生产等系列犯罪活动。其主要犯罪事实如下：</p>
+                
+                <ul class="crime-list">
+                    <li>一、非法采集基因与人体实验：该校利用入学体检环节，在未告知学生及监护人、未获合法授权的情况下，系统性采集、筛选学生生物样本，并利用其设立的"青苗农场"试验基地，对部分学生及已毕业人员进行非法人体改造实验，造成其身体机能与外观发生异常改变。</li>
+                    
+                    <li>二、非法生产与投放药剂：该校所属校医院在未取得药品生产许可的情况下，私自配制非法化学制剂，影响学生生理及认知发育。</li>
+                    
+                    <li>三、非法食品生产与销售：该校利用实验产生的人体生物材料，在其食堂后厨加工区内非法生产"英材良品"品牌罐头食品，并向校内部分人员供应。</li>
+                    
+                    <li>四、伪造文件与隐瞒真相：调查发现，该校为掩盖其违法犯罪行为及校内安全事故，存在伪造、变造相关文件记录的行为，包括但不限于2025年3月8日学生林又死亡事件的有关材料。</li>
+                </ul>
+                
+                <p>目前，案件处置进展如下：</p>
+                
+                <ul class="progress-list">
+                    <li>人员解救与控制：现场安全解救并妥善安置学生共计<strong class="emphasis">1500名</strong>。经市医疗卫生专家团队全面体检与心理评估，所有获救学生生命体征平稳，身体机能未见由案件直接引起的器质性异常，情绪状态基本稳定，现已全部交由家长接回并接受后续关怀。</li>
+                    
+                    <li>涉案人员与场所查处：警方已依法对包括该校校长、校医院负责人、农场项目主管在内的<strong class="emphasis">44名</strong>涉嫌犯罪的核心人员采取刑事强制措施。涉案的"青苗农场"试验基地、校医院特殊制剂室、食堂非法加工区等<strong class="emphasis">17处</strong>场所已被依法查封，相关实验设备、制剂原料、生产工具及涉案食品均被扣押。</li>
+                    
+                    <li>非法活动被制止：相关非法人体实验、非法药剂配制与投放、非法食品加工等犯罪行为已被有效制止，彻底消除了其对师生健康的直接危害风险。</li>
+                    
+                    <li>证据固定与深挖：专案组已提取并固定大量电子证据、文书证据及物证，扣押涉案服务器、实验记录、财务账册若干。对于案件涉及的"类人生物体"来源、基因数据流向、校外销售网络等延伸线索，警方正在会同相关技术部门及兄弟单位深入开展调查。</li>
+                </ul>
+                
+                <div class="conclusion">
+                    <p><strong class="emphasis">青苗中学案件是一起性质极其恶劣、手段隐蔽、危害严重的集团犯罪。</strong>其行为严重践踏法律尊严，侵害公民基本权利，危害社会公共安全与食品安全底线。公安机关坚决依法严厉打击此类犯罪，维护人民群众生命健康安全与社会公平正义。</p>
+                </div>
+                
+                <p>目前，案件正在进一步侦办中。公安机关敦促其他涉案人员尽快投案自首，并呼吁广大群众继续提供相关线索。</p>
+            </div>
+            
+            <div class="contact-info">
+                <p>举报电话：武阳市公安局刑侦支队</p>
+                <div class="phone">0515-XXXXXXXX</div>
+            </div>
+            
+            <div class="police-footer">
+                <div class="date">2025年10月17日</div>
+                <div class="stamp">
+                    <div class="stamp-content">武阳市公安局</div>
+                </div>
+                <div>
+                    <button class="back-to-chat-btn" id="backToChatBtn">返回聊天界面</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ==================== 原有页面结构 ==================== -->
+    <!-- 邮件弹窗 -->
+    <div class="email-modal" id="emailModal">
+        <div class="email-modal-content">
+            <div class="email-modal-header">
+                <h2>📧 紧急邮件</h2>
+                <p>发件人: 林昭 &lt;linzhao@retro-mail.com&gt; | 发送时间: 2025年5月10日 22:47</p>
+            </div>
+            <div class="email-modal-body" id="emailContent">
+                <!-- 邮件内容将通过JavaScript动态添加 -->
+            </div>
+            <div class="email-modal-close" id="closeEmailBtn">
+                ✕
+            </div>
+        </div>
+    </div>
+    
+    <!-- 举报信弹窗 -->
+    <div class="report-modal" id="reportModal">
+        <div class="report-modal-content">
+            <div class="report-modal-header">
+                <h2>📄 关于青苗中学涉嫌违法犯罪行为的匿名举报信</h2>
+                <p>请填写以下信息后提交举报</p>
+            </div>
+            <div class="report-modal-body" id="reportContent">
+                <!-- 举报信内容将通过JavaScript动态添加 -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- 录音播放弹窗 -->
+    <div class="recording-modal" id="recordingModal">
+        <div class="crt-screen"></div>
+        <div class="warning-flash" id="recordingWarningFlash"></div>
+        <div class="sound-indicator" id="recordingSoundIndicator">
+            <div class="sound-dot"></div>
+            <div class="sound-dot"></div>
+            <div class="sound-dot"></div>
+        </div>
+        <div class="recording-content-wrapper">
+            <div class="recording-header">
+                <h2 class="recording-title">#来自【林昭】</h2>
+                <div class="recording-subtitle">定位地点：青苗中学-录音转文字</div>
+            </div>
+            <div class="recording-content">
+                <div class="scroll-line"></div>
+                <div class="typehead"></div>
+                <div class="recording-transcript" id="recordingTranscript">
+                    <!-- 录音内容将通过JavaScript动态添加 -->
+                </div>
+            </div>
+            <div class="recording-footer">
+                录音播放完毕
+            </div>
+        </div>
+    </div>
+    
+    <!-- 主容器 -->
+    <div class="container" id="mainContainer" style="display: none;">
+        <div class="header">
+            <h1>📧 404的邮箱系统</h1>
+            <p>当前用户: 404 | 收件箱: 5封未读邮件</p>
+            <div class="urgent-badge">紧急邮件</div>
+        </div>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <ul class="mail-list">
+					<li class="mail-item active unread" data-mail="linzhao">
+                        <div class="sender">林昭</div>
+                        <div class="subject">急！我哥的事情，真的只能靠你了！！</div>
+                        <div class="time">2025年5月10日 22:47</div>
+                    </li>
+                    <li class="mail-item" data-mail="hackjob">
+                        <div class="sender">未知发件人</div>
+                        <div class="subject">高薪委托 - 数据恢复项目</div>
+                        <div class="time">2025年5月5日 14:23</div>
+                    </li>
+                    <li class="mail-item" data-mail="cybercontest">
+                        <div class="sender">全国网络安全大赛组委会</div>
+                        <div class="subject">恭喜您获得2025全国网络安全大赛一等奖</div>
+                        <div class="time">2025年4月28日 09:15</div>
+                    </li>
+                    <li class="mail-item" data-mail="computersociety">
+                        <div class="sender">计算机社团</div>
+                        <div class="subject">本周社团活动通知 - 逆向工程实战</div>
+                        <div class="time">2025年4月25日 16:42</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="mail-content">
+                <div class="mail-header">
+                    <h2>急！我哥的事情，真的只能靠你了！！！</h2>
+                    <div class="mail-info">
+                        <div>发件人: 林昭 &lt;linzhao@retro-mail.com&gt;</div>
+                        <div>发送时间: 2025年5月10日 22:47</div>
+                    </div>
+                </div>
+                
+                <div class="mail-body">
+<strong>404大神：</strong>
+
+我是林昭！还记得吗？就是计算机社团那个总缠着你问代码bug的家伙！今天突然找你，是因为有一件特别重要的事情，可能真的只有你能帮我了。
+
+我跟你说说情况：我哥林又，两年前超神发挥考进了青苗中学，那时候我们全家都很为他骄傲！
+
+但高三之后，他整个人就不太对劲了。每周四给家里打电话，总说跟同学处不来，心情也越来越down。学校管得巨严，完全是全封闭式，我们除了电话里说几句"加油"，啥也做不了。
+
+可奇怪的是最后一次通话，他整个人突然"阳光开朗"了起来，语气积极到像换了个人，甚至还安利我："要不你也考青苗吧！"我当时就觉得有点不对劲，但又因为他状态好转而稍微松了口气。结果没过多久，学校就通知我们：他上吊自杀了。
+
+我真的没办法接受啊！！！
+
+警方和校方都说是因为"学业压力大"，但我哥最后那通电话的状态，明明就完全不像要自杀的样子,而且那通电话本来也很奇怪啊喂！爸妈整个人都崩溃了，而青苗中学又偏得要命，信息还封闭，外面的人根本不知道里面发生了什么。
+
+所以我决定亲自去一趟。一方面是想查清真相，另一方面也算是完成我哥最后的建议吧（没错我真的考进来了哈哈）。现在我已经在这所学校里了，但因为校规超严，电子设备一律禁带，我只能偷偷带只智能手表进来，这还是改造过的版本，勉强能避开信号屏蔽跟你联系。
+
+我知道这事儿不容易，也可能有点敏感，但我现在真的只信得过你了😢
+
+如果你愿意帮我，一定要回我邮件啊！我这手表虽然能躲屏蔽，但信号也不稳，我会尽量找机会上线看看。
+
+不管怎样，真的超感谢你愿意看到这里！
+
+<strong>等你消息！</strong>
+
+林昭
+                </div>
+                
+                <div class="chat-section">
+                    <h3>与林昭的对话 <span class="chat-date" id="currentDate">2025.08.31 23:30</span></h3>
+                    
+                    <div class="chat-container">
+                        <div class="chat-window" id="chatWindow">
+                            <!-- 聊天内容将通过JavaScript动态添加 -->
+                        </div>
+                        
+                        <div class="typing-indicator" id="typingIndicator">
+                            <span class="typing-text">林昭正在输入</span>
+                            <div class="typing-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input-area">
+                            <input type="text" class="chat-input" id="messageInput" placeholder="输入消息发送给林昭...">
+                            <button class="send-button" id="sendButton">发送</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>免责声明：本网站为虚拟游戏界面，所有内容均为虚构，与现实无关。邮箱系统及对话内容仅为娱乐目的设计。</p>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 恐怖GIF功能 ====================
+        // 获取恐怖页面DOM元素
+        const terrorPage = document.getElementById('terrorPage');
+        const terrorPopup = document.getElementById('terrorPopup');
+        const closeTerrorPopup = document.getElementById('closeTerrorPopup');
+        const terrorGif = document.getElementById('terrorGif');
+        const gifFullscreen = document.getElementById('gifFullscreen');
+        const bloodOverlay = document.getElementById('bloodOverlay');
+        const borderFlash = document.getElementById('borderFlash');
+        
+        // GIF URL
+        const gifUrl = "https://i.ibb.co/xtHg4jt3/325ac8fb06d447c451185c7ae5a9adb7.gif";
+        
+        // GIF状态变量
+        let gifPlayed = false;
+        let gifDuration = 7000; // GIF播放持续时间
+        
+        // 关闭弹窗并开始播放GIF
+        closeTerrorPopup.addEventListener('click', function() {
+            // 隐藏弹窗
+            terrorPopup.style.display = 'none';
+            
+            // 显示GIF和特效
+            gifFullscreen.style.display = 'flex';
+            terrorGif.style.display = 'block';
+            bloodOverlay.style.display = 'block';
+            borderFlash.style.display = 'block';
+            
+            // 设置GIF源，开始播放
+            terrorGif.src = gifUrl;
+            gifPlayed = true;
+            
+            // 创建血滴特效
+            createBloodDrip();
+            setInterval(createBloodDrip, 3500);
+            
+            // 根据GIF持续时间设置跳转
+            setTimeout(function() {
+                // GIF播放完毕后切换到警情通报页面
+                terrorPage.style.display = 'none';
+                showPolicePage();
+            }, gifDuration);
+        });
+        
+        // 创建随机血滴
+        function createBloodDrip() {
+            if (!gifPlayed) return;
+            
+            const drip = document.createElement('div');
+            drip.className = 'blood-drip';
+            drip.style.left = Math.random() * 100 + '%';
+            drip.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            drip.style.animationDelay = Math.random() * 5 + 's';
+            drip.style.height = (Math.random() * 200 + 100) + 'px';
+            drip.style.opacity = Math.random() * 0.6 + 0.3;
+            drip.style.display = 'block';
+            
+            document.body.appendChild(drip);
+            
+            // 动画结束后移除元素
+            setTimeout(() => {
+                if (drip.parentNode) {
+                    drip.parentNode.removeChild(drip);
+                }
+            }, 15000);
+        }
+        
+        // ==================== 警情通报页面功能 ====================
+        const policePage = document.getElementById('policePage');
+        const backToChatBtn = document.getElementById('backToChatBtn');
+        
+        // 显示警情通报页面
+        function showPolicePage() {
+            policePage.style.display = 'block';
+        }
+        
+        // 返回聊天界面
+        backToChatBtn.addEventListener('click', function() {
+            policePage.style.display = 'none';
+            // 继续聊天流程
+            currentKeyword = "你还好吗";
+            systemPromptShown = false;
+            showSystemPrompt();
+        });
+        
+        // ==================== 原有代码（保持原样） ====================
+        // ====================== 初始化邮件弹窗内容 ======================
+        const emailContent = document.getElementById('emailContent');
+        const originalEmail = `主题：急！我哥的事情，真的只能靠你了！！！
+
+404大神：
+
+我是林昭！还记得吗？就是计算机社团那个总缠着你问代码bug的家伙！今天突然找你，是因为有一件特别重要的事情，可能真的只有你能帮我了。
+
+我跟你说说情况：我哥林又，两年前超神发挥考进了青苗中学，那时候我们全家都很为他骄傲！
+
+但高三之后，他整个人就不太对劲了。每周四给家里打电话，总说跟同学处不来，心情也越来越down。学校管得巨严，完全是全封闭式，我们除了电话里说几句"加油"，啥也做不了。
+
+可奇怪的是最后一次通话，他整个人突然"阳光开朗"了起来，语气积极到像换了个人，甚至还安利我："要不你也考青苗吧！"我当时就觉得有点不对劲，但又因为他状态好转而稍微松了口气。结果没过多久，学校就通知我们：他上吊自杀了。
+
+我真的没办法接受啊！！！
+
+警方和校方都说是因为"学业压力大"，但我哥最后那通电话的状态，明明就完全不像要自杀的样子,而且那通电话本来也很奇怪啊喂！爸妈整个人都崩溃了，而青苗中学又偏得要命，信息还封闭，外面的人根本不知道里面发生了什么。
+
+所以我决定亲自去一趟。一方面是想查清真相，另一方面也算是完成我哥最后的建议吧（没错我真的考进来了哈哈）。现在我已经在这所学校里了，但因为校规超严，电子设备一律禁带，我只能偷偷带只智能手表进来，这还是改造过的版本，勉强能避开信号屏蔽跟你联系。
+
+我知道这事儿不容易，也可能有点敏感，但我现在真的只信得过你了😢
+
+如果你愿意帮我，一定要回我邮件啊！我这手表虽然能躲屏蔽，但信号也不稳，我会尽量找机会上线看看。
+
+不管怎样，真的超感谢你愿意看到这里！
+
+等你消息！
+
+林昭`;
+        
+        // 将邮件内容添加到弹窗中，保留格式
+        emailContent.innerHTML = originalEmail.replace(/\n/g, '<br>').replace(/1\./g, '<br>1.').replace(/2\./g, '<br>2.').replace(/3\./g, '<br>3.');
+        
+		// ====================== 图片URL映射配置 ======================
+        const imageUrlMapping = {
+            "早餐图片.jpg": "https://i.imgs.ovh/2026/01/02/Ci6Nrm.jpeg",
+            "食堂菜单图片.jpg": "https://i.imgs.ovh/2026/01/02/Ci8fxY.md.png",
+            "宿舍守则.jpg": "https://i.imgs.ovh/2026/01/02/Ci6is9.md.jpeg",
+            "校园卡照片.jpg": "https://i.imgs.ovh/2026/01/02/Ci8COp.md.jpeg",
+            "储物柜密码锁.jpg": "https://i.imgs.ovh/2026/01/02/Ci61xF.md.jpeg",
+			"录音文件图片.jpg":"https://i.imgs.ovh/2026/01/02/Ci8vvb.md.jpeg",
+            "身上的划痕图片.jpg": "https://i.imgs.ovh/2026/01/02/CiQ3tY.md.jpeg",
+			"一堆档案袋.jpg":"https://i.imgs.ovh/2026/01/02/CiDPl9.jpeg",
+            "张晓苗工作日志.jpg": "https://i.imgs.ovh/2026/01/02/CikntN.jpeg",
+            "日记1.jpg": "https://i.imgs.ovh/2026/01/02/Ci8yk6.md.jpeg",
+            "日记2.jpg": "https://i.imgs.ovh/2026/01/02/Ci8ZNd.md.jpeg",
+            "日记3.jpg": "https://i.imgs.ovh/2026/01/02/Ci8jVg.md.jpeg",
+            "日记4.jpg": "https://i.imgs.ovh/2026/01/02/Ci8cn0.md.jpeg",
+            "日记5.jpg": "https://i.imgs.ovh/2026/01/02/Ci8O4O.md.jpeg",
+            "校服上的脚印.jpg": "https://i.imgs.ovh/2026/01/02/Ci80pc.md.jpeg"
+};
+
+        // ====================== 聊天数据 ======================
+        const chatData = {
+            "2025.08.31 23:30": [
+                {
+                    sender: "林昭",
+                    content: "https://qingmiaomiddleschool.github.io/Official-Site/",
+                    type: "received",
+                    time: "23:30"
+                },
+                {
+                    sender: "林昭",
+                    content: "大神，这是学校的官网，我哥的死肯定有蹊跷，我得去弄清楚到底发生了什么。",
+                    type: "received",
+                    time: "23:30"
+                }
+            ],
+            "2025.09.01 07:05": [
+				{
+                    sender: "林昭",
+                    content: "早餐图片.jpg",
+                    type: "received",
+                    time: "07:05"
+                },
+				{
+                    sender: "林昭",
+                    content: "食堂菜单图片.jpg",
+                    type: "received",
+                    time: "07:05"
+                },
+                {
+                    sender: "林昭",
+                    content: "大神早上好！今天是开学第一天，学校的早餐还挺丰盛的，居然还提供免费的牛奶喝。",
+                    type: "received",
+                    time: "07:05"
+                },
+				{
+                    sender: "林昭",
+                    content: "对了，我哥的入学资料有什么问题吗？",
+                    type: "received",
+                    time: "07:05"
+                }
+            ],
+            "2025.09.02 21:30": [
+                {
+                    sender: "林昭",
+                    content: "宿舍守则.jpg",
+                    type: "received",
+                    time: "21:30"
+                },
+                {
+                    sender: "林昭",
+                    content: "我以为学生手册的规矩已经够多了，没想到还有宿舍守则，谁能分清上学和坐牢。",
+                    type: "received",
+                    time: "21:30"
+                },
+                {
+                    sender: "林昭",
+                    content: "宵禁之后我就出不去了，昨天偷看宿管输密码开门还差点被抓到了......",
+                    type: "received",
+                    time: "21:30"
+                },
+                {
+                    sender: "林昭",
+                    content: "这段时间我先熟悉一下学校，如果能知道宿舍楼密码的话，就能趁宵禁时间出去调查了。",
+                    type: "received",
+                    time: "21:30"
+                }
+            ],
+            "2025.09.08 14:35": [
+                {
+                    sender: "林昭",
+                    content: "校园卡照片.jpg",
+                    type: "received",
+                    time: "14:35"
+                },
+                {
+                    sender: "林昭",
+                    content: "大神，我感觉我行了，今晚先出去探探路。",
+                    type: "received",
+                    time: "14:35"
+                },
+                {
+                    sender: "林昭",
+                    content: "每个学生在寝室楼都有自己的储物柜，不知道我哥的储物柜有没有被清理，每个柜子都有编号，他的会在哪呢。",
+                    type: "received",
+                    time: "14:35"
+                }
+            ],
+            "2025.09.08 20：40": [
+                {
+                    sender: "林昭",
+                    content: "储物柜密码锁.jpg",
+                    type: "received",
+                    time: "20：40"
+                },
+                {
+                    sender: "林昭",
+                    content: "https://qingmiaomiddleschool.github.io/Lin-You-s-Blog/",
+                    type: "received",
+                    time: "20：40"
+                },
+                {
+                    sender: "林昭",
+                    content: "试了他生日打不开，自从他上高中后我们就很少说话，或许他的主页会透露些线索。",
+                    type: "received",
+                    time: "20：40"
+                }
+            ],      
+            "2025.09.08 20：55": [
+                {
+                    sender: "林昭",
+                    content: "我哥电话里没说过这些事，他当时还去了校医院，应该有留下记录。",
+                    type: "received",
+                    time: "20：55"
+                }
+            ],
+			"2025.09.09 10:30": [
+				{
+                    sender: "林昭",
+                    content: "我今天去找了他们三个，冲上去质问他们是不是欺负过林又，那三个傻x居然说是他自己精神有问题，跟他们半毛钱关系都没有，鬼才信！",
+                    type: "received",
+                    time: "10:30"
+                },
+				{
+                    sender: "林昭",
+                    content: "他们要不是心虚的话，为什么一开始把我认成我哥会那么害怕？后面居然还跟我动手！还好我也不是吃素的，直接抢先给了那个戴眼镜的一拳，给他打成熊猫眼了，你是没看到他那副衰样，哈哈。",
+                    type: "received",
+                    time: "10:30"
+                }
+			],	
+            "2025.09.09 12:12": [
+                {
+                    sender: "林昭",
+                    content: "真见鬼了，刚才又碰到那个四眼，不知道用了什么灵丹妙药，我下那么重的手明明当场就肿得跟猪头一样，半天不到居然好了！？",
+                    type: "received",
+                    time: "12:12"
+                },
+                {
+                    sender: "林昭",
+                    content: "不对，好像有点不对劲，他们为什么表现得像从来没见过我一样，看到我一点反应都没有。",
+                    type: "received",
+                    time: "12:12"
+                },
+                {
+                    sender: "林昭",
+                    content: "我的电子手表可以转录音频，你看一下，这太邪门了，好像跟上午不是同一批人。",
+                    type: "received",
+                    time: "12:12"
+                },
+				{
+                    sender: "林昭",
+                    content: "录音文件图片.jpg",
+                    type: "received",
+                    time: "12:12"
+                }
+            ],
+            "2025.09.09 12:48": [
+                {
+                    sender: "林昭",
+                    content: "大神，其实有一个疑问一直盘踞在我的头顶。",
+                    type: "received",
+                    time: "12:48"
+                }
+            ],
+            "2025.09.15 06:30": [
+                {
+                    sender: "林昭",
+                    content: "劳动教育课居然有一整天，居然完全不是面子工程吗？今天外出要换衣服收走设备，结束后我再联系你。",
+                    type: "received",
+                    time: "06:30"
+                },
+                {
+                    sender: "林昭",
+                    content: "我好像还被分配了一个搭档，不是我以貌取人，他真的看起来不太聪明，俗称像个伪人。",
+                    type: "received",
+                    time: "06:30"
+                }
+            ],
+            "2025.09.15 21:35": [
+                {
+                    sender: "林昭",
+                    content: "累死我了，修了一整天树杈子，身上一直被树枝刮，痛死了。剪下来的东西还得捆起来搬运，这到底是劳动教育还是劳动改造啊。",
+                    type: "received",
+                    time: "21:35"
+                },
+                {
+                    sender: "林昭",
+                    content: "那个搭档完全帮不上忙，支一支动一动，问他叫什么名字都不理我，一直指着我。好想把他挂上青苗论坛。",
+                    type: "received",
+                    time: "21:35"
+                }   
+            ],
+			    "2025.09.15 21:38": [
+                {
+                    sender: "林昭",
+                    content: "问老师能不能换个搭子也糊弄我，可恶的张晓苗，看见我的脸像看见鬼一样，难道我有这么丑吗？",
+                    type: "received",
+                    time: "21:35"
+                }  
+            ],
+            "2025.09.15 21:45": [       
+                {
+                    sender: "林昭",
+                    content: "欸？刚刚有个女生被树枝划伤，老师带她去校医院了，好机会，趁机看看可以去什么地方调查一下。",
+                    type: "received",
+                    time: "21:38"
+                }
+            ],
+            "2025.09.15 22:25": [   
+                {
+                    sender: "林昭",
+                    content: "我洗澡的时候发现的，我有点......我要崩溃了。",
+                    type: "received",
+                    time: "22:25"
+                },
+                {
+                    sender: "林昭",
+                    content: "身上的划痕图片.jpg",
+                    type: "received",
+                    time: "22:25"
+                },
+                {
+                    sender: "林昭",
+                    content: "你觉得这是巧合吗？",
+                    type: "received",
+                    time: "22:25"
+                }
+            ],
+            "2025.09.15 00:50": [
+                {
+                    sender: "林昭",
+                    content: "算了不想这些有的没的，今天找到的文件才是关键。",
+                    type: "received",
+                    time: "00:50"
+                },
+                {
+                    sender: "林昭",
+                    content: "张晓苗工作日志.jpg",
+                    type: "received",
+                    time: "00:50"
+                },
+                {
+                    sender: "林昭",
+                    content: "\"加速异变，提前定植。\"什么意思？我哥哥还没死？但我是亲眼看他火化的？！",
+                    type: "received",
+                    time: "00:50"        
+                }
+            ],  
+            "2025.09.15 01:05": [
+                {
+                    sender: "林昭",
+                    content: "如果死的不是我哥，难道是我哥杀人了？不对，他不可能这么做，他杀的人是谁？",
+                    type: "received",
+                    time: "01:05"        
+                }
+            ],  
+            "2025.09.15 01:35": [
+                {
+                    sender: "林昭",
+                    content: "对了，日志里还提到林又在案发前神志不清是因为私自减少了YC-08营养液摄入，这......这是什么东西。",
+                    type: "received",
+                    time: "01:35"
+                }
+            ],
+            "2025.09.16 07:35": [
+                {
+                    sender: "林昭",
+                    content: "今天早餐的时候我偷偷把牛奶倒掉了，目前没有什么异常，就是......感觉我的指甲好像长长了很多。",
+                    type: "received",
+                    time: "07:35"
+                },
+                {
+                    sender: "林昭",
+                    content: "马上就要去农场了，我觉得我离真相不远了。昨天那个去校医院的女生回来说医生给她开了很多奇怪的检查，但最后病历上也没有检查结果，只说是普通擦伤。",
+                    type: "received",
+                    time: "07:35"
+                },
+                {
+                    sender: "林昭",
+                    content: "也不知道昨天是哪个医生值班，反正校医院一定有问题，大神你能帮我查一下吗？",
+                    type: "received",
+                    time: "07:35"
+                },
+				{
+                    sender: "林昭",
+                    content: "这当中一定有阴谋，学校没法解释为什么有一半的学生在毕业时失踪。我会录音保存证据，晚上定时发给你，如果证据充足就去报警！",
+                    type: "received",
+                    time: "07:35"
+                }
+            ],  
+            "2025.09.16 07:45": [           
+                {
+                    sender: "林昭",
+                    content: "这当中一定有阴谋，学校没法解释为什么有一半的学生在毕业时失踪。我会录音保存证据，晚上定时发给你，如果证据充足就去报警！",
+                    type: "received",
+                    time: "07:45"
+                },
+                {
+                    sender: "林昭",
+                    content: "放心吧！我可是名侦探林昭！",
+                    type: "received",
+                    time: "07:45"
+                }
+            ]
+        };
+        
+        // 系统提示配置
+        const systemPrompts = {
+            "start": {
+                prompt: "答应林昭的请求，开启下一进程。",
+                nextKeyword: "350",
+                dateIndex: 0,
+                inputType: "period"
+            },
+            "350": {
+                prompt: "请输入林昭入学考试的分数。",
+                nextKeyword: "2510",
+                dateIndex: 0,
+                inputType: "keyword"
+            },
+            "2510": {
+                prompt: "请输入林昭所在的班级。",
+                nextKeyword: "乳糖不耐",
+                dateIndex: 0,
+                inputType: "keyword"
+            },
+            "乳糖不耐": {
+                prompt: "请输入林又体检报告中出现的身体异常。",
+                nextKeyword: "5201",
+                dateIndex: 1,
+                inputType: "keyword"
+            },
+            "5201": {
+                prompt: "请输入宿舍楼密码。",
+                nextKeyword: "YC001",
+                dateIndex: 2,
+                inputType: "keyword"
+            },
+            "YC001": {
+                prompt: "请输入林又储物柜的编号。",
+                nextKeyword: "20101123",
+                dateIndex: 3,
+                inputType: "keyword"
+            },
+            "20101123": {
+                prompt: "请输入林又储物柜8位数字密码。",
+                nextKeyword: "英才2301班",
+                dateIndex: 4,
+                inputType: "keyword"
+            },
+            "英才2301班": {
+                prompt: "请输入官大华三人所在的班级。",
+                nextKeyword: "营养不良性贫血",
+                dateIndex: 5,
+                inputType: "keyword"
+            },
+            "营养不良性贫血": {
+                prompt: "请输入林又的诊断结果。",
+                nextKeyword: "选择1",
+                dateIndex: 6,
+                inputType: "keyword"
+            },
+            "选择1": {
+                prompt: "请在下列选项中选择一项回答：1<打得好>;2<你怎么样>。",
+                nextKeyword: "选择2",
+                dateIndex: 7,
+                inputType: "choice",
+                options: ["打得好", "你怎么样"]
+            },
+            "选择2": {
+                prompt: "请在下列选项中选择一项回答：1<演技派>;2<真是见鬼了>。",
+                nextKeyword: "问号",
+                dateIndex: 8,
+                inputType: "choice",
+                options: ["演技派", "真是见鬼了"]
+            },
+            "问号": {
+                prompt: "请输入\"？\"",
+                nextKeyword: "省略号",
+                dateIndex: 9,
+                inputType: "question"
+            },
+            "省略号": {
+                prompt: "请输入\"......\"",
+                nextKeyword: "青苗论坛",
+                dateIndex: 9,
+                inputType: "ellipsis"
+            },
+            "青苗论坛": {
+                prompt: "你好像没听说过这个论坛，先问问林昭",
+                nextKeyword: "选择3",
+                dateIndex: 11,
+                inputType: "keyword"
+            },
+            "选择3": {
+                prompt: "请在下列选项中选择一项回答：1<事出反常必有妖>；2<他社恐>。",
+                nextKeyword: "农场办公室档案柜",
+                dateIndex: 12,
+                inputType: "choice",
+                options: ["事出反常必有妖", "他社恐"]
+            },
+            "农场办公室档案柜": {
+                prompt: "现在该去哪里调查呢？",
+                nextKeyword: "20250308",
+                dateIndex: 13,
+                inputType: "keyword"
+            },
+            "20250308": {
+                prompt: "哪一天的文件最重要？",
+                nextKeyword: "选择4",
+                dateIndex: 13,
+                inputType: "keyword"
+            },
+			"选择4": {
+                prompt: "请在下列选项中选择一项回答：1<你想多了>；2<恐怕不是>。",
+                nextKeyword: "选择5",
+                dateIndex: 14,
+                inputType: "choice",
+                options: ["你想多了", "恐怕不是"]
+            },
+            "选择5": {
+                prompt: "请在下列选项中选择一项回答：1<节哀>;2<死者另有其人>。",
+                nextKeyword: "QM230617001",
+                dateIndex: 15,
+                inputType: "choice",
+                options: ["节哀", "死者另有其人"]
+            },
+            "QM230617001": {
+                prompt: "请输入案件的另一个当事人。",
+                nextKeyword: "幼苗共育",
+                dateIndex: 16,
+                inputType: "keyword"
+            },
+            "幼苗共育": {
+                prompt: "青苗中学好像有个很特殊的制度",
+                nextKeyword: "QM251123489",
+                dateIndex: 16,
+                inputType: "keyword"
+            },
+            "QM251123489": {
+                prompt: "请输入林昭搭档的学号。",
+                nextKeyword: "吃植物人",
+                dateIndex: 16,
+                inputType: "keyword"
+            },
+            "吃植物人": {
+                prompt: "食人族怎么补充膳食纤维？",
+                nextKeyword: "牛奶",
+                dateIndex: 16,
+                inputType: "keyword"
+            },
+            "牛奶": {
+                prompt: "YC-08营养液是什么？",
+                nextKeyword: "选择6",
+                dateIndex: 17,
+                inputType: "keyword"
+            },
+            "选择6": {
+                prompt: "请在下列选项中选择一项回答：1<好的>；2<你注意安全>。",
+                nextKeyword: "砧木",
+                dateIndex: 18,
+                inputType: "choice",
+                options: ["好", "注意安全"]
+            },
+            "砧木": {
+                prompt: "英才是什么？",
+                nextKeyword: "接穗",
+                dateIndex:18,
+                inputType: "keyword"
+            },
+            "接穗": {
+                prompt: "青苗是什么？",
+                nextKeyword: "成材",
+                dateIndex: 18,
+                inputType: "keyword"
+            },
+            "成材": {
+                prompt: "毕业意味着什么？",
+                nextKeyword: "举报信",
+                dateIndex: 18,
+                inputType: "keyword"
+            },
+            "举报信": {
+                prompt: "看来你发现了什么不得了的秘密，那么......",
+                nextKeyword: "录音文件",
+                dateIndex: 18,
+                inputType: "report"
+            },
+            "录音文件": {
+                prompt: "",
+                nextKeyword: "你还好吗",
+                dateIndex: 18,
+                inputType: "recording"
+            },
+            "你还好吗": {
+                prompt: "事情结束以后，你一直试图联系林昭但都没有回响，现在还要再试一试吗？请输入“你还好吗？收到请回复”",
+                nextKeyword: "结局选择",
+                dateIndex: 18,
+                inputType: "keyword"
+            },
+            "结局选择": {
+                prompt: "真是幸福的结局，你还有什么想说的吗？跟他说“期待我们下次见面”;或者问问他：“食人族如何补充膳食纤维？”",
+                nextKeyword: "end",
+                dateIndex: 18,
+                inputType: "keyword"
+            }
+        };
+        
+        // 林昭的回复 - 根据文本内容重新整理
+        const linzhaoResponses = {
+            "start": [
+				"听说青苗是我们这升学率最高，校友最牛逼的学校，每年只招500人，没想到我走狗屎运录取上了！真是不枉费我突击几个月，这说不定是我这辈子考得最好的一回，你能帮我查到我入学考试考了多少分吗？"
+ ],
+            "350": [
+                "怎么会这样？！我还以为我超常发挥了，居然是捡漏。",
+                "算了，学校愿意要我就行，反正我也不是真的过来读书的。",
+                "听说还有英才班和青苗班两种班，我哥就是英才班，我在哪个班？"
+            ],
+            "2510": [
+                "难道我真的是天才？！莫非是学校发现了我的某些不为人知的潜力？没想到青苗居然是这么开明的学校。",
+                "算了，先不纠结这个，明天还要报道，我得先睡了。话说既然能找到我的信息，是不是也能搜到我哥的入学资料？"
+            ],
+            "乳糖不耐": [
+                "体检报告上写的？他确实乳糖不耐，小的家里订新鲜牛奶，他喝一次吐一次，连奶茶都喝不了，看来他没享到学校免费牛奶的福利。",
+                "我得去上课了!老师看着还挺凶的，刚开学我得夹着尾巴做人，再抽空联系。"
+            ],
+            "5201": [
+                "宿舍楼密码？太好了！名侦探林昭要夜间出动了！"
+            ],
+            "YC001": [
+                "帮大忙了！我看到宿管查完寝离开了，我这就去找哥的储物柜。"
+            ],
+            "20101123": [
+                "居然是我的生日......",
+                "日记1.jpg",
+                "日记2.jpg",
+                "日记3.jpg",
+                "日记4.jpg",
+				"日记5.jpg",
+                "我哥的事情肯定跟这几个人有关，他们在哪个班？！我必须要问清楚。"
+            ],
+            "英才2301班": [
+                "真是该死，他们等着吧！"
+            ],
+            "营养不良性贫血": [
+                "还好他没有受太重的伤，这件事难道就这么算了吗？这已经是校园霸凌了，竟然没有老师管管。我应该早点发现的...",
+                "我听到宿管的脚步声了，此地不宜久留，我得先回宿舍。"
+            ],
+            "打得好": [
+                "那是当然，从小都是我罩着我哥。"
+            ],
+            "你怎么样": [
+                "这几个狗贼下手也是真挺重的，我从地上爬起来感觉被十几个人打了，浑身都在疼。",
+                "卧槽，我的新校服，另外一套刚洗啊。",
+                "校服上的脚印.jpg",
+                "没问出来什么有效的信息，他们就急着动手了，我还会一直盯着他们的。"
+            ],
+            "演技派": [
+                "不知道，感觉像被人夺舍了，接下来还是暗中调查吧。"
+            ],
+            "真是见鬼了": [
+                "不知道，感觉像被人夺舍了，接下来还是暗中调查吧。"
+            ],
+            "？": [
+                "为什么你每次回答都不超过十个字啊，好高冷哦。",
+                "显得我像你的舔狗。"
+            ],
+            "......": [
+                "......"
+            ],
+            "青苗论坛": [
+                "这是我们学校内部的论坛，都是学生在使用，官网上应该查得到。不过在这学期好像暂停维护了，还是我听劳动课上的同学知道的。说起来，论坛上会不会有什么信息？",
+            ],
+            "事出反常必有妖": [
+                "是吧，我也觉得这学校怪得很。"
+            ],
+            "他社恐": [
+                "这么内向就别当老师了吧，还以为是被我的英俊打击到了。",
+            ],
+            "农场办公室档案柜": [
+                "这里好多文件，好像都是以日期命名的，时间不多，我该先看哪一个？",
+                "一堆档案袋.jpg"
+            ],
+            "20250308": [
+                "这居然跟我哥有关！三月八号就是他自杀的那天！",
+                "时间差不多了，再不回去要被张晓苗逮个正着了，先拍照回去再看。"
+            ],
+			"你想多了": [
+                "林昭：我觉得……不……不！",
+            ],
+			"恐怕不是": [
+                "林昭：这么多巧合串在一起就不是巧合了！难道我哥哥还活着？！",
+            ],
+            "节哀": [
+                "我有种预感，他或许真的没有死，但是......"
+            ],
+            "死者另有其人": [
+                "你说得对......但是世界上真的有长得这么像的人吗？连亲人都认不出来？对！有！之前被我打伤的那个四眼，或许后来碰到的根本不是他们！",
+            ],
+            "QM230617001": [
+                "这串数字怎么这么眼熟，我好像在哪里见过......这和我哥的学号只有前缀不一样！但我从来没见过这种前缀的学号，他和我哥有什么联系？"
+            ],
+            "幼苗共育": [
+                "幼苗共育！？难道，搭档的分配不是随机的，那我的搭档学号是什么？"
+            ],
+            "QM251123489": [
+                "果然，从入学就有的学号开始，搭档的组合就已经确定好了。",
+                "等等，我的编号是489，如果搭档是一一对应的话，一个年级的英才班和青苗班加起来就有一千人了！学校招生公告里说只招500人，就算是秘密招生或者走关系户，但每年的毕业生也只有500人啊，剩下的人去哪了？",
+                "如果每个人都有两个，而且相似到亲人都无法分辨，那一定是在毕业的时候有500人会被剩下的取代！大神我们只能线上联系，你一定要确保跟你联系的是我！我们需要一个暗号。还记得原来在社团你给我讲的那个冷笑话吗？食人族怎么补充膳食纤维？"
+            ],
+            "吃植物人": [
+                "哈哈，你果然记得，那说好了，如果你觉得有什么不对就问我这个问题。尤其是感觉我状态不对的时候，一定要问！"
+            ],
+            "牛奶": [
+                "对！我哥明明乳糖不耐，校医院居然还建议我哥多喝牛奶，这根本不是牛奶。",
+                "这其中一定有什么阴谋，得找机会去校医院调查。",
+                "总之这个牛奶不能再喝了，正好明天还是劳动课，我要去找张晓苗对质！"
+            ],
+            "好的": [
+                "放心吧！我可是名侦探林昭！"
+            ],
+            "注意安全": [
+                "放心吧！我可是名侦探林昭！"
+            ],
+            "你还好吗？收到请回复": [
+                "我很好！这次的事情太谢谢你了，虽然没能救回哥哥，但至少一切真相大白，不会再有新的受害者了。",
+                "爸爸妈妈一直在为哥哥的事情跟青苗中学打官司，我这一个多月一直在帮他们，我相信警方也不会放过幕后真凶的。",
+                "等我调整好状态，我们还会在计算机赛场上见面的！"
+            ],
+            "期待我们下次见面": [
+                "到时候你可要手下留情呀！"
+            ],
+            "食人族如何补充膳食纤维？": [
+                "吃植物人。"
+            ]
+        };
+        
+        // 录音文件内容
+        const recordingSegments = [
+            {
+                speaker: 'linzhao',
+                text: '今天居然去另外一片苗圃，这一片明显高一些，看路都费劲。而且不是张晓苗带队，算她走运。',
+                delay: 100
+            },
+            {
+                speaker: 'maleClear',
+                text: '你好，搭档，又见面了。',
+                delay: 150
+            },
+            {
+                speaker: 'linzhao',
+                text: '你…好，哈哈，先干活吧。',
+                delay: 200
+            },
+            {
+                speaker: 'maleSerious',
+                text: '同学们，我们今天的任务是灌溉这批成熟作物，枝干上已经留有接口，大家把输液管插入当中即可。接口很小，成熟作物枝叶茂密，请同学们耐心寻找。',
+                delay: 120
+            },
+            {
+                speaker: 'linzhao',
+                text: '什么接口……',
+                delay: 150,
+                soundEffect: '树叶悉索声'
+            },
+            {
+                speaker: 'linzhao',
+                text: '卧槽！',
+                delay: 100,
+                soundEffect: '重物落地声'
+            },
+            {
+                speaker: 'linzhao',
+                text: '这什么？！这有一张脸！',
+                delay: 80
+            },
+            {
+                speaker: 'maleClear',
+                text: '搭档，你在做什么？',
+                delay: 150
+            },
+            {
+                speaker: 'linzhao',
+                text: '你没看到吗？',
+                delay: 150,
+                soundEffect: '树叶悉索声'
+            },
+            {
+                speaker: 'linzhao',
+                text: '这里，这里有张脸！不对……',
+                delay: 100
+            },
+            {
+                speaker: 'femaleDoubt',
+                text: '林昭你怎么了？这不是很正常吗？我都看到接口了，快继续吧。',
+                delay: 120
+            },
+            {
+                speaker: 'linzhao',
+                text: '不对这张脸我见过……对，在学校官网上有这张脸。',
+                delay: 100
+            },
+            {
+                speaker: 'sound',
+                text: '',
+                delay: 300,
+                soundEffect: '树叶悉索声'
+            },
+            {
+                speaker: 'linzhao',
+                text: '你们自己看这个也……啊！这不是叶子，这是头发！这是头发！',
+                delay: 70
+            },
+            {
+                speaker: 'linzhao',
+                text: '他们不是树是人！昨天…昨天不是巧合，我哥…他没死，他没死。',
+                delay: 90
+            },
+            {
+                speaker: 'sound',
+                text: '',
+                delay: 400,
+                soundEffect: '肢体碰撞的闷响'
+            },
+            {
+                speaker: 'maleSerious',
+                text: '不要乱跑！',
+                delay: 100
+            },
+            {
+                speaker: 'linzhao',
+                text: '别拦我！',
+                delay: 80
+            },
+            {
+                speaker: 'maleSerious',
+                text: '林昭你身体不舒服吗？是不是没好好吃早饭低血糖，老师带你去校医院吧。',
+                delay: 110
+            },
+            {
+                speaker: 'linzhao',
+                text: '滚开！别碰我！',
+                delay: 70
+            },
+            {
+                speaker: 'sound',
+                text: '',
+                delay: 500,
+                soundEffect: '一阵混乱的噪音'
+            },
+            {
+                speaker: 'linzhao',
+                text: '你们不信？你！你过来！你敢告诉大家你叫什么名字吗？',
+                delay: 90
+            },
+            {
+                speaker: 'maleClear',
+                text: '不……',
+                delay: 200
+            },
+            {
+                speaker: 'linzhao',
+                text: '别跑！给我过来！你……你的手……掉了……',
+                delay: 120
+            },
+            {
+                speaker: 'sound',
+                text: '',
+                delay: 600,
+                soundEffect: '植物根茎断裂声'
+            },
+            {
+                type: 'narration',
+                text: '短促的寂静之后，恐慌突然爆发，大家都大喊着有怪物有怪物。',
+                delay: 100
+            },
+            {
+                type: 'narration',
+                text: '你很难想象那是怎样的混乱，人们尖叫、奔逃、精神崩溃，听上去有人摔倒、互殴，嘈杂的声响甚至淹没了林昭颠三倒四的喃喃自语，而且似乎永远也等不到尽头。',
+                delay: 80
+            },
+            {
+                type: 'narration',
+                text: '就在你坚持不下去打算关掉录音的时候，尖锐的警笛声划开了一切混乱……',
+                delay: 120
+            }
+        ];
+
+        // 说话者映射
+        const speakerNames = {
+            'linzhao': { name: '林昭', className: 'speaker-linzhao' },
+            'maleClear': { name: '清亮的男声', className: 'speaker-male-clear' },
+            'maleSerious': { name: '严肃男声', className: 'speaker-male-serious' },
+            'femaleDoubt': { name: '疑惑的女声', className: 'speaker-female-doubt' }
+        };
+        
+        // 聊天日期顺序
+        const chatDates = [
+            "2025.08.31 23:30", "2025.09.01 07:05", "2025.09.02 21:30", 
+            "2025.09.08 14:35", "2025.09.08 20：40", "2025.09.08 20：50",
+            "2025.09.08 20：55", "2025.09.09 10:30","2025.09.09 12:12", 
+            "2025.09.09 12:48", "2025.09.15 06:30", "2025.09.15 21:35",
+            "2025.09.15 21:38", "2025.09.15 21:45", "2025.09.15 22:25", 
+            "2025.09.15 00:50", "2025.09.15 01:05", "2025.09.15 01:35",
+            "2025.09.16 07:35", "2025.09.16 07:45", "结局", 
+            
+        ];
+        
+        // 当前聊天状态
+        let currentDateIndex = 0;
+        let currentKeyword = "start";
+        let isWaitingForResponse = false;
+        let conversationHistory = [];
+        let systemPromptShown = false;
+        let conversationStep = 0;
+        let reportAnswers = {};
+        
+        // 举报信填空数据
+        const reportBlanks = [
+            { id: "date", placeholder: "2025年3月8日", correctAnswer: "2025年3月8日" },
+            { id: "ycGene", placeholder: "YC基因携带者", correctAnswer: "YC基因携带者" },
+            { id: "nutritionLiquid", placeholder: "YC-08营养液", correctAnswer: "YC-08营养液" },
+            { id: "brand", placeholder: "英材良品", correctAnswer: "英材良品" }
+        ];
+        
+        // DOM元素
+        const emailModal = document.getElementById('emailModal');
+        const reportModal = document.getElementById('reportModal');
+        const recordingModal = document.getElementById('recordingModal');
+        const mainContainer = document.getElementById('mainContainer');
+        const closeEmailBtn = document.getElementById('closeEmailBtn');
+        const chatWindow = document.getElementById('chatWindow');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const currentDateElement = document.getElementById('currentDate');
+        
+        // 录音弹窗相关元素
+        const recordingTranscript = document.getElementById('recordingTranscript');
+        const recordingWarningFlash = document.getElementById('recordingWarningFlash');
+        const recordingSoundIndicator = document.getElementById('recordingSoundIndicator');
+        
+        // 图片放大功能变量
+        let currentImageScale = 1;
+        let isDragging = false;
+        let dragStartX, dragStartY;
+        let imageOffsetX = 0, imageOffsetY = 0;
+        let startOffsetX = 0, startOffsetY = 0;
+        
+        // 渲染聊天消息
+    function renderMessage(message, date = null) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${message.type}`;
+    
+    const header = document.createElement('div');
+    header.className = 'message-header';
+    
+    // 如果是系统消息，不显示时间
+    if (message.type === "system") {
+        header.innerHTML = `${message.sender}`; // 只显示发件人，不显示时间
+    } else {
+        // 非系统消息正常显示时间
+        const timeStr = message.time;
+        header.innerHTML = `${message.sender} <span class="message-time">${timeStr}</span>`;
+    }
+    
+    const content = document.createElement('div');
+    content.className = 'message-content';
+    
+            // 处理图片和链接
+let contentText = message.content;
+if (contentText.includes('.jpg')) {
+    contentText = contentText.replace(/(\S+\.jpg)/g, (match) => {
+        // 图片URL映射
+        const imageMapping = {
+            "早餐图片.jpg": "https://i.imgs.ovh/2026/01/02/Ci6Nrm.jpeg",
+            "食堂菜单图片.jpg": "https://i.imgs.ovh/2026/01/02/Ci8fxY.md.png",
+            "宿舍守则.jpg": "https://i.imgs.ovh/2026/01/02/Ci6is9.md.jpeg",
+            "校园卡照片.jpg": "https://i.imgs.ovh/2026/01/02/Ci8COp.md.jpeg",
+            "储物柜密码锁.jpg": "https://i.imgs.ovh/2026/01/02/Ci61xF.md.jpeg",
+			"录音文件图片.jpg":"https://i.imgs.ovh/2026/01/02/Ci8vvb.md.jpeg",
+            "身上的划痕图片.jpg": "https://i.imgs.ovh/2026/01/02/CiQ3tY.md.jpeg",
+			"一堆档案袋.jpg":"https://i.imgs.ovh/2026/01/02/CiDPl9.jpeg",
+            "张晓苗工作日志.jpg": "https://i.imgs.ovh/2026/01/02/CikntN.jpeg",
+            "日记1.jpg": "https://i.imgs.ovh/2026/01/02/Ci8yk6.md.jpeg",
+            "日记2.jpg": "https://i.imgs.ovh/2026/01/02/Ci8ZNd.md.jpeg",
+            "日记3.jpg": "https://i.imgs.ovh/2026/01/02/Ci8jVg.md.jpeg",
+            "日记4.jpg": "https://i.imgs.ovh/2026/01/02/Ci8cn0.md.jpeg",
+            "日记5.jpg": "https://i.imgs.ovh/2026/01/02/Ci8O4O.md.jpeg",
+            "校服上的脚印.jpg": "https://i.imgs.ovh/2026/01/02/Ci80pc.md.jpeg"
+        };
+        
+        // 从映射中获取URL，如果找不到则使用默认URL
+        const imageUrl = imageMapping[match] || "https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80";
+        return `<img src="${imageUrl}" alt="${match}" class="zoomable-img">`;
+    });
+}
+            
+            content.innerHTML = contentText;
+            
+            messageDiv.appendChild(header);
+            messageDiv.appendChild(content);
+            chatWindow.appendChild(messageDiv);
+            
+            // 添加到历史记录
+            conversationHistory.push({
+                ...message,
+                date: date || chatDates[currentDateIndex]
+            });
+            
+            // 滚动到底部
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            
+            // 为新添加的图片添加点击事件
+            const images = messageDiv.querySelectorAll('.zoomable-img');
+            images.forEach(img => {
+                img.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    openImageZoom(this.src);
+                });
+            });
+        }
+        
+        // 打开图片放大视图
+        function openImageZoom(src) {
+            // 创建遮罩层
+            const overlay = document.createElement('div');
+            overlay.className = 'image-overlay';
+    
+            // 创建放大图片容器
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'image-glow';
+    
+            // 创建放大图片
+            const zoomImg = document.createElement('img');
+            zoomImg.src = src;
+            zoomImg.className = 'zoomable-image glow-border';
+    
+            imageContainer.appendChild(zoomImg);
+            overlay.appendChild(imageContainer);
+            document.body.appendChild(overlay);
+    
+            // 添加红色泛光特效
+            setTimeout(() => {
+                imageContainer.classList.add('active');
+            }, 100);
+    
+            // 重置缩放和位置
+            currentImageScale = 1;
+            imageOffsetX = 0;
+            imageOffsetY = 0;
+            updateImageTransform(zoomImg);
+    
+            // 鼠标滚轮缩放
+            overlay.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                const rect = zoomImg.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+        
+                const zoomIntensity = 0.1;
+                const oldScale = currentImageScale;
+                const delta = e.deltaY > 0 ? -zoomIntensity : zoomIntensity;
+                currentImageScale = Math.max(0.5, Math.min(5, currentImageScale + delta));
+        
+                // 调整位置以保持焦点不变
+                const scaleRatio = currentImageScale / oldScale;
+                imageOffsetX = x - (x - imageOffsetX) * scaleRatio;
+                imageOffsetY = y - (y - imageOffsetY) * scaleRatio;
+        
+                updateImageTransform(zoomImg);
+        
+                // 根据缩放级别调整泛光强度
+                updateGlowIntensity(currentImageScale, imageContainer);
+            });
+    
+            // 拖拽功能
+            zoomImg.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                dragStartX = e.clientX - imageOffsetX;
+                dragStartY = e.clientY - imageOffsetY;
+                zoomImg.style.cursor = 'grabbing';
+                e.preventDefault();
+            });
+    
+            document.addEventListener('mousemove', function(e) {
+               if (isDragging) {
+                    imageOffsetX = e.clientX - dragStartX;
+                    imageOffsetY = e.clientY - dragStartY;
+                    updateImageTransform(zoomImg);
+                }
+            });
+    
+            document.addEventListener('mouseup', function() {
+                isDragging = false;
+                zoomImg.style.cursor = 'grab';
+            });
+    
+            // 点击关闭
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay || e.target === imageContainer) {
+                    // 移除泛光特效
+                    imageContainer.classList.remove('active');
+                    setTimeout(() => {
+                        if (document.body.contains(overlay)) {
+                            document.body.removeChild(overlay);
+                        }
+                    }, 300);
+                }
+            });
+        }
+
+        // 更新图片变换
+        function updateImageTransform(img) {
+            img.style.transform = `translate(${imageOffsetX}px, ${imageOffsetY}px) scale(${currentImageScale})`;
+        }
+
+        // 根据缩放级别调整泛光强度
+        function updateGlowIntensity(scale, container) {
+            const beforeElement = container.querySelector('.image-glow::before') || 
+                         container.style;
+    
+            // 缩放越大，泛光越强
+            const glowIntensity = Math.min(1, (scale - 0.5) / 4.5);
+            const glowOpacity = 0.3 + (glowIntensity * 0.5);
+            const glowBlur = 20 + (glowIntensity * 15);
+    
+            // 更新CSS变量
+            container.style.setProperty('--glow-opacity', glowOpacity);
+            container.style.setProperty('--glow-blur', `${glowBlur}px`);
+    
+            // 动态更新伪元素样式
+            if (container.style) {
+                const pseudoStyle = `
+                    opacity: ${glowOpacity};
+                    filter: blur(${glowBlur}px);
+        `;
+                container.setAttribute('data-glow', pseudoStyle);
+            }
+        }
+        
+        // 添加日期分隔线
+        function addDateDivider(date) {
+            const divider = document.createElement('div');
+            divider.className = 'date-divider';
+            divider.innerHTML = `<span>${date}</span>`;
+            chatWindow.appendChild(divider);
+        }
+        
+        // 添加历史消息提示
+        function addHistoryNote(date) {
+            const note = document.createElement('div');
+            note.className = 'history-note';
+            note.textContent = `以上历史消息 ${date}`;
+            chatWindow.appendChild(note);
+        }
+        
+        // 显示系统提示
+        function showSystemPrompt() {
+            if (systemPrompts[currentKeyword] && !systemPromptShown) {
+                setTimeout(() => {
+                    const systemMessage = {
+                        sender: "系统提示",
+                        content: systemPrompts[currentKeyword].prompt,
+                        type: "system",
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    };
+                    renderMessage(systemMessage);
+                    systemPromptShown = true;
+                    
+                    // 更新输入框提示
+                    updateInputPlaceholder();
+                }, 800);
+            }
+        }
+        
+        // 更新输入框提示
+        function updateInputPlaceholder() {
+            const promptConfig = systemPrompts[currentKeyword];
+            if (!promptConfig) return;
+            
+            switch(promptConfig.inputType) {
+                case "period":
+                    messageInput.placeholder = "输入“好”";
+                    break;
+                case "question":
+                    messageInput.placeholder = "请输入问号\"?\"...";
+                    break;
+                case "ellipsis":
+                    messageInput.placeholder = "请输入省略号\"......\"...";
+                    break;
+                case "choice":
+                case "finalChoice":
+                    messageInput.placeholder = "请输入选项（如: 1 或 2）...";
+                    break;
+                case "report":
+                    messageInput.placeholder = "请输入\"我要举报\"...";
+                    break;
+                default:
+                    messageInput.placeholder = "输入消息发送给林昭...";
+            }
+        }
+        
+        // 初始化聊天记录
+        function initializeChat() {
+            chatWindow.innerHTML = '';
+            const currentDate = chatDates[currentDateIndex];
+            currentDateElement.textContent = currentDate;
+            
+            // 渲染第一天的初始消息
+            if (chatData[currentDate]) {
+                chatData[currentDate].forEach(message => {
+                    renderMessage(message, currentDate);
+                });
+            }
+            
+            // 显示第一个系统提示
+            setTimeout(() => {
+                showSystemPrompt();
+            }, 1000);
+            
+            // 滚动到底部
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+        
+        // 加载指定日期的消息
+        function loadDateMessages(dateIndex) {
+            if (dateIndex < 0 || dateIndex >= chatDates.length) return;
+            
+            const date = chatDates[dateIndex];
+            
+            // 添加历史消息提示
+            if (dateIndex > 0) {
+                addHistoryNote(date);
+            }
+            
+            // 渲染该日期的所有消息
+            if (chatData[date]) {
+                chatData[date].forEach(message => {
+                    renderMessage(message, date);
+                });
+            }
+            
+            currentDateIndex = dateIndex;
+            currentDateElement.textContent = date;
+            systemPromptShown = false;
+            
+            // 延迟显示新的系统提示
+            setTimeout(() => {
+                showSystemPrompt();
+            }, 1000);
+        }
+        
+        // 显示打字指示器
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'flex';
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+        
+        // 隐藏打字指示器
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+        }
+        
+        // 验证用户输入
+        function validateUserInput(input) {
+            const promptConfig = systemPrompts[currentKeyword];
+            if (!promptConfig) return true;
+            
+            switch(promptConfig.inputType) {
+                case "period":
+                    return input === "好" || input === "好";
+                case "question":
+                    return input === "？" || input === "?";
+                case "ellipsis":
+                    return input === "......" || input === "。。。。。";
+                case "choice":
+                case "finalChoice":
+                    if (input === "1" || input === "2") {
+                        return true;
+                    }
+                    // 检查是否包含选项文本
+                    const optionText = promptConfig.options[parseInt(input)-1];
+                    return optionText && input.includes(optionText);
+                case "keyword":
+                    return input.includes(currentKeyword);
+                case "report":
+                    return input.includes("我要举报");
+                default:
+                    return true;
+            }
+        }
+        
+        // 获取用户输入的标准化值
+        function normalizeUserInput(input) {
+            const promptConfig = systemPrompts[currentKeyword];
+            if (!promptConfig) return input;
+            
+            switch(promptConfig.inputType) {
+                case "period":
+                    return "好";
+                case "question":
+                    return "？";
+                case "ellipsis":
+                    return "......";
+                case "choice":
+                case "finalChoice":
+                    if (input === "1") return promptConfig.options[0];
+                    if (input === "2") return promptConfig.options[1];
+                    return input;
+                case "report":
+                    return "我要举报";
+                default:
+                    return input;
+            }
+        }
+        
+        // 处理举报信
+        function showReportModal() {
+            const reportContent = document.getElementById('reportContent');
+            let reportHTML = `
+                <div style="font-family: 'SimSun', '宋体', serif; line-height: 1.8; font-size: 16px;">
+                    <div class="instructions">
+                        <h3>填写说明：</h3>
+                        <ul>
+                            <li>请仔细阅读举报信内容，在红色方框处填写对应的关键信息</li>
+                            <li>将鼠标悬停在输入框上可查看提示信息</li>
+                            <li>填写完整后点击"确认发送举报信"按钮提交</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="letter-container">
+                        <div class="letter-header">
+                            <h2>关于青苗中学涉嫌违法犯罪行为的匿名举报信</h2>
+                            <p>武阳市公安局并转市教育局监察部门：</p>
+                        </div>
+                        
+                        <div class="letter-body">
+                            <p>2025年3月8日青苗中学学生林又上吊自杀案另有隐情，通过深入调查和现场取证可知青苗中学危害学生生命安全、伪造死亡证明掩盖事故真相，且涉嫌严重违法犯罪。</p>
+                            
+                            <p>现举报青苗中学存在以下重大违法犯罪嫌疑：</p>
+                            
+                            <p>一、该校以"<span class="blank-input">
+                                <input type="text" id="blank1" placeholder="请输入你的答案" value="${reportAnswers.blank1 || ''}">
+                                <span class="blank-hint">提示：该校的计划名称</span>
+                            </span>"为名，每年通过入学考试和体检筛查招生500名，体检中系统性采集学生基因样本，实为挑选<span class="blank-input">
+                                <input type="text" id="blank2" placeholder="请输入你的答案" value="${reportAnswers.blank2 || ''}">
+                                <span class="blank-hint">提示：特殊的基因名称</span>
+                            </span>携带者，以非法基因改造迫使学生肢体发生畸形异变。另有<span class="blank-input">
+                                <input type="text" id="blank3" placeholder="请输入你的答案" value="${reportAnswers.blank3 || ''}">
+                                <span class="blank-hint">提示：数字形式</span>
+                            </span>名类人生物体，逐步复制正常学生外貌、记忆，模仿其思维行动，最终顶替真实学生身份，并进入社会关键岗位。</p>
+                            
+                            <p>二、校方将所属校医院生产的非法药剂<span class="blank-input">
+                                <input type="text" id="blank4" placeholder="请输入你的答案" value="${reportAnswers.blank4 || ''}">
+                                <span class="blank-hint">提示：非法药剂名称</span>
+                            </span>伪装成每日牛奶，投放神经类药物，诱导身体发生植物化变异，营造正常校园生活幻觉并操控学生认知发育。</p>
+                            
+                            <p>三、利用校内试验基地"<span class="blank-input">
+                                <input type="text" id="blank5" placeholder="请输入你的答案" value="${reportAnswers.blank5 || ''}">
+                                <span class="blank-hint">提示：四个字的试验基地名称</span>
+                            </span>"对失去原有社会身份的毕业生进行非法人体实验,养殖变异人体作为食材原料，加工成校董事会旗下品牌"<span class="blank-input">
+                                <input type="text" id="blank6" placeholder="请输入你的答案" value="${reportAnswers.blank6 || ''}">
+                                <span class="blank-hint">提示：四个字的品牌名称</span>
+                            </span>"罐头食品，支撑类人体生长活动。</p>
+                            
+                            <p>关键证据藏匿于该校农场培育区、校医院特殊项目服务器及食堂后厨加工流水线。</p>
+                            
+                            <p>该案已构成非法人体实验、危害公共安全、伪造身份等多重犯罪，严重危害社会安全。</p>
+                            
+                            <p>恳请贵部门立即成立专案组立案侦查，解救受控学生，控制相关人员，查封涉案场所。</p>
+                            
+                            <div class="letter-signature">
+                                <p>2025年9月16日</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-message" id="resultMessage"></div>
+                    
+                    <div class="btn-container">
+                        <button class="submit-btn" id="submitReportBtn">确认发送举报信</button>
+                    </div>
+                    
+                    <div class="footer">
+                        <p>本系统为匿名提交，所有信息将直接送达武阳市公安局和市教育局监察部门</p>
+                        <p>© 2025 武阳市匿名举报系统 | 严格保密举报人信息</p>
+                    </div>
+                </div>
+            `;
+            
+            reportContent.innerHTML = reportHTML;
+            
+            // 添加提交按钮事件监听
+            setTimeout(() => {
+                const submitBtn = document.getElementById('submitReportBtn');
+                if (submitBtn) {
+                    submitBtn.addEventListener('click', submitReport);
+                }
+            }, 100);
+            
+            reportModal.style.display = 'flex';
+        }
+        
+        // 提交举报信
+        function submitReport() {
+            const blank1 = document.getElementById('blank1').value.trim();
+            const blank2 = document.getElementById('blank2').value.trim();
+            const blank3 = document.getElementById('blank3').value.trim();
+            const blank4 = document.getElementById('blank4').value.trim();
+            const blank5 = document.getElementById('blank5').value.trim();
+            const blank6 = document.getElementById('blank6').value.trim();
+            
+            // 保存答案
+            reportAnswers.blank1 = blank1;
+            reportAnswers.blank2 = blank2;
+            reportAnswers.blank3 = blank3;
+            reportAnswers.blank4 = blank4;
+            reportAnswers.blank5 = blank5;
+            reportAnswers.blank6 = blank6;
+            
+            // 验证所有字段是否填写
+            if (!blank1 || !blank2 || !blank3 || !blank4 || !blank5 || !blank6) {
+                alert("请填写所有空白字段！");
+                return;
+            }
+            
+            // 正确答案
+            const correctAnswers = {
+                blank1: "英材培育计划",
+                blank2: "YC基因",
+                blank3: "500",
+                blank4: "YC-08营养液",
+                blank5: "青苗农场",
+                blank6: "英材良品"
+            };
+            
+            // 验证答案
+            const userAnswers = {
+                blank1: blank1,
+                blank2: blank2,
+                blank3: blank3,
+                blank4: blank4,
+                blank5: blank5,
+                blank6: blank6
+            };
+            
+            let allCorrect = true;
+            let errorFields = [];
+            
+            // 检查每个答案
+            for (const key in correctAnswers) {
+                if (userAnswers[key] !== correctAnswers[key]) {
+                    allCorrect = false;
+                    errorFields.push(key);
+                }
+            }
+            
+            // 显示结果
+            const resultMessage = document.getElementById('resultMessage');
+            if (allCorrect) {
+                resultMessage.textContent = "✓ 举报信发送成功！所有信息正确，已成功提交至武阳市公安局和市教育局监察部门。";
+                resultMessage.className = "result-message success";
+                resultMessage.style.display = "block";
+                
+                // 模拟发送成功后的效果
+                const submitBtn = document.getElementById('submitReportBtn');
+                submitBtn.disabled = true;
+                submitBtn.textContent = "已发送";
+                
+                // 3秒后关闭弹窗并继续聊天流程
+                setTimeout(() => {
+                    reportModal.style.display = 'none';
+                    currentKeyword = "录音文件";
+                    systemPromptShown = false;
+                    showRecordingModal();
+                }, 3000);
+            } else {
+                let errorText = "× 发送失败！以下信息填写有误：";
+                
+                // 根据错误的字段提供具体提示
+                errorFields.forEach((field, index) => {
+                    const fieldNumber = field.replace('blank', '');
+                    const fieldNames = {
+                        "blank1": "招生计划名称",
+                        "blank2": "基因名称",
+                        "blank3": "类人生物体数量",
+                        "blank4": "非法药剂名称",
+                        "blank5": "试验基地名称",
+                        "blank6": "罐头食品品牌"
+                    };
+                    
+                    errorText += ` ${fieldNames[field]}`;
+                    if (index < errorFields.length - 1) {
+                        errorText += "、";
+                    }
+                });
+                
+                errorText += "。请检查后重新提交。";
+                
+                resultMessage.textContent = errorText;
+                resultMessage.className = "result-message error";
+                resultMessage.style.display = "block";
+                
+                // 高亮错误的输入框
+                errorFields.forEach(field => {
+                    document.getElementById(field).style.borderColor = "#b30000";
+                    document.getElementById(field).style.backgroundColor = "#fff0f0";
+                    document.getElementById(field).style.boxShadow = "0 0 5px rgba(255, 0, 0, 0.5)";
+                });
+                
+                // 重置正确的输入框样式
+                for (const key in correctAnswers) {
+                    if (!errorFields.includes(key)) {
+                        document.getElementById(key).style.borderColor = "#99cc99";
+                        document.getElementById(key).style.backgroundColor = "#f9fff9";
+                        document.getElementById(key).style.boxShadow = "none";
+                    }
+                }
+                
+                // 5秒后隐藏错误信息
+                setTimeout(function() {
+                    resultMessage.style.display = "none";
+                }, 5000);
+            }
+        }
+        
+        // 显示录音弹窗（修改版本）
+		// ==================== 插入位置：在showRecordingModal()函数定义之前 ====================
+
+// ==================== GIF预加载功能 ====================
+// 在录音播放时预加载GIF但不显示
+let gifPreloaded = false;
+
+// 预加载GIF函数
+function preloadTerrorGif() {
+    if (gifPreloaded) return;
+    
+    console.log("开始预加载恐怖GIF...");
+    
+    // 创建隐藏的Image对象预加载GIF
+    const preloadImage = new Image();
+    
+    preloadImage.onload = function() {
+        console.log("恐怖GIF预加载完成");
+        gifPreloaded = true;
+        
+        // 将预加载的GIF应用到terrorGif元素
+        terrorGif.src = gifUrl;
+        terrorGif.style.display = 'none'; // 保持隐藏
+        
+        // 设置加载完成标记
+        terrorGif.dataset.preloaded = 'true';
+    };
+    
+    preloadImage.onerror = function() {
+        console.warn("恐怖GIF预加载失败，将在显示时重新加载");
+        // 即使预加载失败，也不影响后续显示
+    };
+    
+    // 开始加载（使用原GIF URL）
+    preloadImage.src = gifUrl;
+}
+
+// 修改showRecordingModal函数，添加预加载
+const originalShowRecordingModal = window.showRecordingModal;
+window.showRecordingModal = function() {
+    // 调用原始函数
+    if (typeof originalShowRecordingModal === 'function') {
+        originalShowRecordingModal();
+    }
+    
+    // 开始预加载GIF
+    console.log("录音弹窗打开，开始预加载恐怖GIF...");
+    setTimeout(() => {
+        preloadTerrorGif();
+    }, 500);
+};
+
+// 修改showTerrorPage函数，使用预加载的GIF
+const originalShowTerrorPage = window.showTerrorPage;
+window.showTerrorPage = function() {
+    // 调用原始函数
+    if (typeof originalShowTerrorPage === 'function') {
+        originalShowTerrorPage();
+    }
+    
+    // 使用预加载的GIF
+    if (gifPreloaded && terrorGif.src === gifUrl) {
+        console.log("使用预加载的GIF");
+        terrorGif.style.display = 'none'; // 继续隐藏，直到用户点击继续
+    } else {
+        console.log("GIF未预加载，现在开始加载");
+        terrorGif.src = gifUrl;
+        terrorGif.style.display = 'none';
+    }
+};
+
+// 优化closeTerrorPopup点击事件处理
+const originalCloseTerrorPopupHandler = closeTerrorPopup.onclick;
+closeTerrorPopup.onclick = function(e) {
+    // 调用原始处理函数
+    if (typeof originalCloseTerrorPopupHandler === 'function') {
+        originalCloseTerrorPopupHandler.call(this, e);
+    }
+    
+    // 隐藏弹窗
+    terrorPopup.style.display = 'none';
+    
+    // 显示GIF和特效
+    gifFullscreen.style.display = 'flex';
+    
+    // 确保GIF立即显示
+    if (gifPreloaded && terrorGif.complete) {
+        terrorGif.style.display = 'block';
+        console.log("立即显示预加载的GIF");
+    } else {
+        // 如果还没加载完，显示加载状态并等待
+        terrorGif.style.display = 'block';
+        terrorGif.onload = function() {
+            console.log("GIF加载完成，现在显示");
+            gifPreloaded = true;
+        };
+    }
+    
+    bloodOverlay.style.display = 'block';
+    borderFlash.style.display = 'block';
+    gifPlayed = true;
+    
+    // 创建血滴特效
+    createBloodDrip();
+    const bloodInterval = setInterval(createBloodDrip, 3500);
+    
+    // 根据GIF持续时间设置跳转
+    setTimeout(function() {
+        clearInterval(bloodInterval);
+        terrorPage.style.display = 'none';
+        showPolicePage();
+    }, gifDuration);
+};
+
+// 页面加载后自动预加载（可选）
+window.addEventListener('load', function() {
+    // 可以在这里添加页面加载后预加载，但为了节省带宽，我们只在录音播放时预加载
+    console.log("页面加载完成，GIF预加载系统就绪");
+});
+
+// ==================== 插入结束 ====================
+        function showRecordingModal() {
+            recordingModal.style.display = 'flex';
+            recordingTranscript.innerHTML = '';
+            
+            // 逐段显示录音文本
+            let segmentIndex = 0;
+            
+            function typeNextSegment() {
+                if (segmentIndex >= recordingSegments.length) {
+                    // 电子手表人工智能自动转录
+                    setTimeout(() => {
+                        const continueBtn = document.createElement('div');
+                        continueBtn.innerHTML = '<br><br><div style="text-align:center; color:#2aff2a; font-size:20px; cursor:pointer; padding:10px; border:1px solid #ff2a2a;">点击继续</div>';
+                        continueBtn.addEventListener('click', () => {
+                            recordingModal.style.display = 'none';
+                            // 显示恐怖GIF页面
+                            showTerrorPage();
+                        });
+                        recordingTranscript.appendChild(continueBtn);
+                    }, 1000);
+                    return;
+                }
+                
+                const segment = recordingSegments[segmentIndex];
+                
+                // 创建段落容器
+                const segmentElement = document.createElement('div');
+                
+                if (segment.type === 'narration') {
+                    // 叙述段落
+                    segmentElement.className = 'narration';
+                    segmentElement.textContent = segment.text;
+                    recordingTranscript.appendChild(segmentElement);
+                    
+                    // 滚动到最新内容
+                    setTimeout(() => {
+                        segmentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                    
+                    segmentIndex++;
+                    setTimeout(typeNextSegment, segment.delay);
+                } else if (segment.speaker === 'sound') {
+                    // 纯音效
+                    const soundElement = document.createElement('span');
+                    soundElement.className = 'sound-effect';
+                    soundElement.textContent = segment.soundEffect;
+                    recordingTranscript.appendChild(soundElement);
+                    
+                    // 播放打字音效视觉反馈
+                    playRecordingTypeSound();
+                    
+                    // 滚动到最新内容
+                    setTimeout(() => {
+                        soundElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                    
+                    // 延迟后继续
+                    segmentIndex++;
+                    setTimeout(typeNextSegment, segment.delay);
+                } else {
+                    // 对话段落
+                    const speaker = speakerNames[segment.speaker];
+                    segmentElement.className = `speaker ${speaker.className}`;
+                    segmentElement.innerHTML = `<span class="speaker-name">${speaker.name}：</span><span class="dialogue-text"></span>`;
+                    recordingTranscript.appendChild(segmentElement);
+                    
+                    const textElement = segmentElement.querySelector('.dialogue-text');
+                    
+                    // 如果有音效，先显示音效
+                    if (segment.soundEffect) {
+                        const soundSpan = document.createElement('span');
+                        soundSpan.className = 'sound-effect';
+                        soundSpan.textContent = segment.soundEffect;
+                        textElement.appendChild(soundSpan);
+                        
+                        // 播放打字音效视觉反馈
+                        playRecordingTypeSound();
+                        
+                        // 短暂延迟后继续打文本
+                        setTimeout(() => {
+                            typeText(textElement, segment.text, segment.delay, () => {
+                                segmentIndex++;
+                                typeNextSegment();
+                            });
+                        }, 300);
+                    } else {
+                        typeText(textElement, segment.text, segment.delay, () => {
+                            segmentIndex++;
+                            typeNextSegment();
+                        });
+                    }
+                    
+                    // 滚动到最新内容
+                    setTimeout(() => {
+                        segmentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                }
+            }
+            
+            // 打字文本
+            function typeText(element, text, baseDelay, onComplete) {
+                if (!text) {
+                    onComplete();
+                    return;
+                }
+
+                let charIndex = 0;
+                const highlightWords = ['脸', '头发', '人', '死', '怪物', '手', '掉了', '没死', '接口', '张晓苗', '林昭'];
+                
+                function typeNextChar() {
+                    if (charIndex >= text.length) {
+                        // 段落打字完成，添加光标闪烁效果
+                        const cursor = document.createElement('span');
+                        cursor.className = 'cursor';
+                        element.appendChild(cursor);
+                        
+                        // 短暂显示光标后移除并继续
+                        setTimeout(() => {
+                            cursor.remove();
+                            onComplete();
+                        }, 500);
+                        return;
+                    }
+
+                    const char = text[charIndex];
+                    const charSpan = document.createElement('span');
+                    charSpan.className = 'typed-char';
+                    
+                    // 检查是否为需要高亮的字
+                    let isHighlighted = false;
+                    for (const word of highlightWords) {
+                        if (text.substring(charIndex, charIndex + word.length) === word) {
+                            const wordSpan = document.createElement('span');
+                            wordSpan.className = 'highlight';
+                            wordSpan.textContent = word;
+                            element.appendChild(wordSpan);
+                            
+                            // 如果是"怪物"、"死"等词，触发警告效果
+                            if (['怪物', '死', '掉了'].includes(word)) {
+                                triggerRecordingWarning();
+                            }
+                            
+                            charIndex += word.length;
+                            isHighlighted = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!isHighlighted) {
+                        charSpan.textContent = char;
+                        element.appendChild(charSpan);
+                        charIndex++;
+                    }
+                    
+                    // 播放打字音效视觉反馈
+                    playRecordingTypeSound();
+                    
+                    // 计算下一个字符的延迟
+                    let nextDelay =  baseDelay * 0.5;
+                    
+                    // 标点符号额外延迟
+                    if (['，', '。', '！', '？', '；', '…'].includes(char)) {
+                        nextDelay *= 3;
+                    }
+                    
+                    // 省略号特殊处理
+                    if (char === '…' && text[charIndex - 2] === '…') {
+                        nextDelay = 150;
+                    }
+                    
+                    setTimeout(typeNextChar, nextDelay);
+                }
+                
+                typeNextChar();
+            }
+            
+            // 开始播放录音
+            typeNextSegment();
+        }
+        
+        // 显示恐怖GIF页面
+        function showTerrorPage() {
+            terrorPage.style.display = 'block';
+            // 重置GIF状态
+            gifPlayed = false;
+            terrorPopup.style.display = 'block';
+            gifFullscreen.style.display = 'none';
+            terrorGif.style.display = 'none';
+            bloodOverlay.style.display = 'none';
+            borderFlash.style.display = 'none';
+        }
+        
+        // 播放录音打字音效视觉反馈
+        function playRecordingTypeSound() {
+            const dots = recordingSoundIndicator.querySelectorAll('.sound-dot');
+            const randomIndex = Math.floor(Math.random() * dots.length);
+            
+            dots[randomIndex].style.animation = 'none';
+            setTimeout(() => {
+                dots[randomIndex].style.animation = 'soundPulse 0.5s ease-out';
+            }, 10);
+        }
+        
+        // 触发录音警告效果
+        function triggerRecordingWarning() {
+            recordingWarningFlash.style.display = 'block';
+            setTimeout(() => {
+                recordingWarningFlash.style.display = 'none';
+            }, 1000);
+        }
+        
+        // 发送用户消息
+        // 修改sendUserMessage函数中的回复部分
+function sendUserMessage() {
+    const rawInput = messageInput.value.trim();
+    if (!rawInput || isWaitingForResponse) return;
+    
+    // 验证用户输入
+    if (!validateUserInput(rawInput)) {
+        const errorMessage = {
+            sender: "系统提示",
+            content: `输入格式不正确！${systemPrompts[currentKeyword].prompt}`,
+            type: "system",
+            time: ""
+        };
+        renderMessage(errorMessage);
+        messageInput.value = '';
+        return;
+    }
+    
+    // 标准化用户输入
+    const message = normalizeUserInput(rawInput);
+    
+    // 获取当前日期的聊天数据，找到合适的时间
+    const currentDate = chatDates[currentDateIndex];
+    const currentChats = chatData[currentDate] || [];
+    
+    // 获取当前聊天中的最后一个用户消息时间
+    let replyTime = "";
+    if (currentChats.length > 0) {
+        // 如果有历史消息，使用最后一条的时间
+        const lastMsg = currentChats[currentChats.length - 1];
+        replyTime = lastMsg.time;
+    } else {
+        // 如果没有历史消息，使用当前时间（简化为小时:分钟）
+        replyTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }
+    
+    // 添加用户消息
+    const userMessage = {
+        sender: "404",
+        content: message,
+        type: "sent",
+        time: replyTime // 用户消息使用这个时间
+    };
+    
+    renderMessage(userMessage);
+    messageInput.value = '';
+    isWaitingForResponse = true;
+    sendButton.disabled = true;
+    systemPromptShown = false;
+    
+    // 特殊处理：举报信
+    if (currentKeyword === "举报信") {
+        setTimeout(() => {
+            showReportModal();
+            isWaitingForResponse = false;
+            sendButton.disabled = false;
+        }, 500);
+        return;
+    }
+    
+    // 获取林昭的回复
+    const responses = linzhaoResponses[message] || linzhaoResponses[currentKeyword];
+    
+    if (responses) {
+        // 显示打字指示器
+        setTimeout(() => {
+            showTypingIndicator();
+            
+            // 逐条发送回复
+            let responseIndex = 0;
+            const sendResponse = () => {
+                if (responseIndex < responses.length) {
+                    const response = responses[responseIndex];
+                    
+                    // 隐藏打字指示器并显示消息
+                    setTimeout(() => {
+                        hideTypingIndicator();
+                        
+                        // 林昭的回复使用相同的时间
+                        const linzhaoMessage = {
+                            sender: "林昭",
+                            content: response,
+                            type: "received",
+                            time: replyTime // 使用和用户消息相同的时间
+                        };
+                        
+                        renderMessage(linzhaoMessage);
+                        
+                        responseIndex++;
+                        
+                        // 如果还有更多回复，继续发送
+                        if (responseIndex < responses.length) {
+                            showTypingIndicator();
+                            setTimeout(sendResponse, 1000 + Math.random() * 2000);
+                        } else {
+                            // 所有回复发送完毕
+                            isWaitingForResponse = false;
+                            sendButton.disabled = false;
+                            
+                            // 更新关键词
+                            if (systemPrompts[currentKeyword] && systemPrompts[currentKeyword].nextKeyword) {
+                                currentKeyword = systemPrompts[currentKeyword].nextKeyword;
+                            }
+                            
+                            // 特殊处理：加载新日期的消息
+                            if (systemPrompts[currentKeyword] && systemPrompts[currentKeyword].dateIndex !== undefined) {
+                                const nextDateIndex = systemPrompts[currentKeyword].dateIndex;
+                                if (nextDateIndex > currentDateIndex) {
+                                    setTimeout(() => {
+                                        loadDateMessages(nextDateIndex);
+                                    }, 1500);
+                                } else {
+                                    // 显示下一个系统提示
+                                    setTimeout(() => {
+                                        showSystemPrompt();
+                                    }, 1000);
+                                }
+                            } else {
+                                // 显示下一个系统提示
+                                setTimeout(() => {
+                                    showSystemPrompt();
+                                }, 1000);
+                            }
+                        }
+                    }, 500);
+                }
+            };
+            
+            // 开始发送回复
+            setTimeout(sendResponse, 1000 + Math.random() * 2000);
+        }, 500);
+    } else {
+        // 没有预设回复，直接更新状态
+        isWaitingForResponse = false;
+        sendButton.disabled = false;
+        
+        // 更新关键词
+        if (systemPrompts[currentKeyword] && systemPrompts[currentKeyword].nextKeyword) {
+            currentKeyword = systemPrompts[currentKeyword].nextKeyword;
+        }
+        
+        // 显示下一个系统提示
+        setTimeout(() => {
+            showSystemPrompt();
+        }, 1000);
+    }
+}
+        
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            // 显示邮件弹窗
+            emailModal.style.display = 'flex';
+            
+            // 关闭邮件弹窗
+            closeEmailBtn.addEventListener('click', () => {
+                emailModal.style.display = 'none';
+                mainContainer.style.display = 'block';
+                initializeChat();
+            });
+            
+            // 发送消息事件
+            sendButton.addEventListener('click', sendUserMessage);
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendUserMessage();
+                }
+            });
+            
+            // 点击弹窗外部关闭
+            emailModal.addEventListener('click', (e) => {
+                if (e.target === emailModal) {
+                    emailModal.style.display = 'none';
+                    mainContainer.style.display = 'block';
+                    initializeChat();
+                }
+            });
+            
+            reportModal.addEventListener('click', (e) => {
+                if (e.target === reportModal) {
+                    reportModal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
